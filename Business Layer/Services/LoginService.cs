@@ -1,4 +1,4 @@
-﻿using Business_Layer.Security;
+﻿using BusinesLayer.Security;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.ActualRepositories;
 using System;
@@ -8,7 +8,7 @@ using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business_Layer.Services
+namespace BusinesLayer.Services
 {
     public class LoginService : ILoginService
     {

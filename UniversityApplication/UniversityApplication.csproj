@@ -188,9 +188,9 @@
     <Content Include="Scripts\jquery-3.4.1.min.map" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Business Layer\Business Layer.csproj">
+    <ProjectReference Include="..\Business Layer\BusinessLayer.csproj">
       <Project>{A80BD223-4C92-45B5-B6F1-F12A125113DC}</Project>
-      <Name>Business Layer</Name>
+      <Name>BusinessLayer</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

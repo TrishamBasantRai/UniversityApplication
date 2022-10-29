@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Business_Layer.Security
+namespace BusinesLayer.Security
 {
     public class PasswordHashing
     {

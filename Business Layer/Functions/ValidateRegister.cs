@@ -9,7 +9,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace Business_Layer.Functions
+namespace BusinesLayer.Functions
 {
     public class ValidateRegister
     {
