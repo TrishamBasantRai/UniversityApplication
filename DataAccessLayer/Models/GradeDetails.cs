@@ -9,6 +9,6 @@ namespace DataAccessLayer.Entities
     public class GradeDetails
     {
         public char Grade { get; set; }
-        public string GradePoints { get; set; }
+        public byte GradePoints { get; set; }
     }
 }

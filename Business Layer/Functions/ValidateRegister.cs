@@ -15,11 +15,7 @@ namespace BusinesLayer.Functions
     {
         public List<ValidationResult> RegistrationValidation(string emailAddress, string password, string confirmPassword)
         {
-            List<ValidationResult> results = new List<ValidationResult>(); ;
-            return ValidationList(results, emailAddress, password, confirmPassword);
-        }
-        private static List<ValidationResult> ValidationList(List<ValidationResult> results, string emailAddress, string password, string confirmPassword)
-        {
+            List<ValidationResult> results = new List<ValidationResult>();
             AccountRepository accountRepository = new AccountRepository();
             UserAccount accountToBeCrossedCheckedWith = accountRepository.getAccountByEmailAddress(emailAddress);
             Regex EmailRegex = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
@@ -40,6 +36,32 @@ namespace BusinesLayer.Functions
                     results.Add(new ValidationResult("Email Address already exists."));
             }
             return results;
+            //return ValidationList(results, emailAddress, password, confirmPassword);
         }
+        //private static List<ValidationResult> ValidationList(List<ValidationResult> results, string emailAddress, string password, string confirmPassword)
+        //{
+        //    AccountRepository accountRepository = new AccountRepository();
+        //    UserAccount accountToBeCrossedCheckedWith = accountRepository.getAccountByEmailAddress(emailAddress);
+        //    Regex EmailRegex = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+        //    if (string.IsNullOrEmpty(emailAddress))
+        //        results.Add(new ValidationResult("Please enter an email address."));
+        //    if (string.IsNullOrEmpty(password))
+        //        results.Add(new ValidationResult("Please enter a password"));
+        //    if (string.IsNullOrEmpty(confirmPassword))
+        //        results.Add(new ValidationResult("Please confirm your password."));
+        //    if ((password != null) && (confirmPassword != null) && (!password.Equals("")) && (!confirmPassword.Equals("")) && (password != confirmPassword))
+        //        results.Add(new ValidationResult("The passwords you entered do not match."));
+        //    if (!EmailRegex.IsMatch(emailAddress))
+        //        results.Add(new ValidationResult("Invalid Email Address!"));
+        //    else
+        //    {
+        //        //ValidateDuplicateEmail - Database
+        //        if (accountToBeCrossedCheckedWith.EmailAddress == emailAddress)
+        //            results.Add(new ValidationResult("Email Address already exists."));
+        //    }
+        //    return results;
+        //}
     }
-}
+}   
+
+//Password should not have any blank spaces, should have at least 1 symbol, 1 number, 1 uppercase and should be at least 8 characters long

@@ -2,15 +2,15 @@
 using DataAccessLayer.Models.ViewModels;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccessLayer.Repositories.IRepositories
+namespace Business_Layer.Services
 {
-    internal interface IStudentRepository
+    internal interface IStudentService
     {
-        int Insert(StudentModel student);
-        int GetStudentID(string emailAddress);
+        List<ValidationResult> StudentValidate(StudentModel student);
     }
 }

@@ -69,8 +69,8 @@ namespace DataAccessLayer.Repositories.ActualRepositories
             {
                 SqlCommand command = new SqlCommand("SELECT EmailAddress FROM UserAccount WHERE EmailAddress=@emailAddress AND HashedPassword = @hashedPassword", conn);
                 command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@emailAddress", emailAddress);
-                command.Parameters.AddWithValue("@hashedPassword", hashedPassword);
+                command.Parameters.Add(new SqlParameter("@emailAddress", emailAddress));
+                command.Parameters.Add(new SqlParameter("@hashedPassword", hashedPassword));
                 SqlDataReader reader = command.ExecuteReader();
                 isValid = reader.HasRows;
             }

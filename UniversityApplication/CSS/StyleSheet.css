@@ -99,7 +99,7 @@ body {
 }
 
 .formInput {
-    margin-bottom: 20px;
+    margin-bottom: 35px;
     margin-top: 5px;
     width: 80%;
     height: 40px;
@@ -127,7 +127,7 @@ body {
     font-size: 15px;
 }
 
-    .submitInput:hover {
-        color: rgb(113, 169, 34);
-        background-color: rgba(70, 70, 70, 0.05);
-    }
+.submitInput:hover {
+    color: rgb(113, 169, 34);
+    background-color: rgba(70, 70, 70, 0.05);
+}

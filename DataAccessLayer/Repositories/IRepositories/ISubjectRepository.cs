@@ -1,5 +1,4 @@
 ﻿using DataAccessLayer.Entities;
-using DataAccessLayer.Models.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IStudentRepository
+    internal interface ISubjectRepository
     {
-        int Insert(StudentModel student);
-        int GetStudentID(string emailAddress);
+        List<string> getSubjectList();
+        int GetSubjectID(string subjectName);
     }
 }

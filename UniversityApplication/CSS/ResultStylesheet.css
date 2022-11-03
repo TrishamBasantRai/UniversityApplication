@@ -1,0 +1,10 @@
+﻿.tableContainer
+{
+    text-align: center;
+    border-collapse: collapse;
+    width: 60%;
+}
+
+.tableContainer th{
+    text-align:center
+}
