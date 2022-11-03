@@ -12,25 +12,10 @@ namespace DataAccessLayer.Common
     {
         public string connectionString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
         public SqlConnection connection;
-        public DAL()
-        {
-            connection = new SqlConnection(connectionString);
-        }
         public void OpenConnection()
         {
-            try
-            {
-                if (connection.State == System.Data.ConnectionState.Open)
-                {
-                    connection.Close();
-                }
-
-                connection.Open();
-            }
-            catch (SqlException error)
-            {
-                throw;
-            }
+            connection = new SqlConnection(connectionString);
+            connection.Open();
         }
         public void CloseConnection()
         {

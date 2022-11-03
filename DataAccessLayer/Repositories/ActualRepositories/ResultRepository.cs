@@ -27,12 +27,16 @@ namespace DataAccessLayer.Repositories.ActualRepositories
             {
                 SqlCommand command = new SqlCommand("INSERT INTO StudentResult(SubjectID, Grade, StudentID) VALUES(@SubjectID, @Grade, @StudentID)", conn);
                 command.CommandType = CommandType.Text;
-                for(int i=0; i<resultModel.SubjectNames.Count; i++)
+
+                for (int i = 0; i < resultModel.SubjectNames.Count; i++)
                 {
+                    //_dal.OpenConnection();
                     command.Parameters.AddWithValue("@SubjectID", subjectRepository.GetSubjectID(resultModel.SubjectNames[i]));
                     command.Parameters.AddWithValue("@Grade", resultModel.Grades[i]);
                     command.Parameters.AddWithValue("@StudentID", StudentID);
                     numberOfRowsAffected = command.ExecuteNonQuery();
+                    command.Parameters.Clear();
+                    //_dal.CloseConnection();
                 }
             }
             _dal.CloseConnection();

@@ -85,8 +85,8 @@ function Details(/*e*/) {
 
 function Results(e) {
     e.preventDefault();
-    var SubjectNamesVar = [this.subOne.value, this.subTwo.value, this.subThree.value];
-    var SubjectGradesVar = [this.gradeOne.value, this.gradeTwo.value, this.gradeThree.value];
+    var SubjectNamesVar = [this.subOne.options[subOne.selectedIndex].value, this.subTwo.options[subTwo.selectedIndex].value, this.subThree.options[subThree.selectedIndex].value];
+    var SubjectGradesVar = [this.gOne.options[gOne.selectedIndex].value, this.gTwo.options[gTwo.selectedIndex].value, this.gThree.options[gThree.selectedIndex].value];
     var ResultModel = {
         SubjectNames: SubjectNamesVar,
         Grades: SubjectGradesVar
