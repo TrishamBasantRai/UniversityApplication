@@ -16,6 +16,12 @@ namespace UniversityApplication.Controllers
     {
         public ActionResult Index()
         {
+            if (Session["emailAddress"] == null)
+                return RedirectToAction("Index", "Login");
+            StudentRepository studentRepository = new StudentRepository();
+            int studentID = studentRepository.GetStudentID();
+            if (studentID > 0)
+                return RedirectToAction("Results", "Student");
             return View();
         }
 
@@ -29,7 +35,13 @@ namespace UniversityApplication.Controllers
 
         public ActionResult Results()
         {
-            //GetSubjects();
+            if (Session["emailAddress"] == null)
+                return RedirectToAction("Index", "Login");
+            StudentRepository studentRepository = new StudentRepository();
+            int studentID = studentRepository.GetStudentID();
+            ResultRepository resultRepository = new ResultRepository();
+            if (resultRepository.ResultExists(studentID))
+                return RedirectToAction("Application", "Student");
             return View();
         }
 
@@ -39,6 +51,13 @@ namespace UniversityApplication.Controllers
             SubjectRepository subjectRepository = new SubjectRepository();
             List<string> result = subjectRepository.getSubjectList();
             return Json(new { data = result } );
+        }
+
+        public ActionResult Application()
+        {
+            if (Session["emailAddress"] == null)
+                return RedirectToAction("Index", "Login");
+            return View();
         }
     }
 }

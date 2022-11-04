@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Models.ViewModels;
+﻿using Business_Layer.Services;
+using DataAccessLayer.Models.ViewModels;
 using DataAccessLayer.Repositories.ActualRepositories;
 using System;
 using System.Collections.Generic;
@@ -20,8 +21,8 @@ namespace UniversityApplication.Controllers
         [HttpPost]
         public JsonResult Index(ResultModel resultModel)
         {
-            ResultRepository resultRepository = new ResultRepository();
-            bool result = resultRepository.Insert(resultModel);
+            ResultService resultService = new ResultService();
+            bool result = resultService.InputResult(resultModel);
             return Json(new { data = result, url = Url.Action("Index", "Login") });
         }
     }

@@ -1,0 +1,27 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>National Identity Number</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Number of Points</th>
+                <th>Application of Status</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+    <script src="~/Scripts/ServerCall.js"></script>
+    <script src="~/Scripts/AdminScript.js"></script>
+    <script>
+        fetchStudentInfo();
+    </script>
+</body>

@@ -2,6 +2,7 @@
 using Business_Layer.Functions;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -14,14 +15,21 @@ namespace BusinesLayer.Services
 {
     public class LoginService : ILoginService
     {
+        private readonly IAccountRepository _accountRepository;
+        private readonly IValidateLogin _loginDataValidation;
+        public LoginService(IAccountRepository accountRepository, IValidateLogin loginDataValidation)
+        {
+            _accountRepository = accountRepository;
+            _loginDataValidation = loginDataValidation;
+        }
         public List<ValidationResult> LoginResults(string emailAddress, string password)
         {
-            ValidateLogin loginDataValidation = new ValidateLogin();
-            List<ValidationResult> results = loginDataValidation.ValidationLoginResults(emailAddress, password);
-            AccountRepository accountRepository = new AccountRepository();
+            //ValidateLogin loginDataValidation = new ValidateLogin();
+            List<ValidationResult> results = _loginDataValidation.ValidationLoginResults(emailAddress, password);
+            //AccountRepository accountRepository = new AccountRepository();
             if (results.Count == 0)
             {
-                if (!accountRepository.IsValidUser(emailAddress, PasswordHashing.ComputeStringToSha256Hash(password)))
+                if (!_accountRepository.IsValidUser(emailAddress, PasswordHashing.ComputeStringToSha256Hash(password)))
                     results.Add(new ValidationResult("Unable to authenticate user!"));
             }
             return results;

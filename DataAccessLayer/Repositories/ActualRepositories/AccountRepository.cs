@@ -53,7 +53,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
                         account.EmailAddress = reader["EmailAddress"].ToString();
                         account.HashedPassword = (byte[])reader["HashedPassword"];
                         account.UserAccountStatus = reader["UserAccountStatus"].ToString();
-                        account.RoleID = (int)reader["RoleID"];
+                        account.RoleID = Convert.ToInt32(reader["RoleID"]);
                     }
                 }
             }

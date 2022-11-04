@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business_Layer.Functions
 {
-    public class ValidateLogin
+    public class ValidateLogin : IValidateLogin
     {
         public List<ValidationResult> ValidationLoginResults(string emailAddress, string password)
         {

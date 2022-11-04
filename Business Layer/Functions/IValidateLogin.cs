@@ -5,10 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace BusinesLayer.Services
+namespace Business_Layer.Functions
 {
-    public interface ILoginService
+    public interface IValidateLogin
     {
-        List<ValidationResult> LoginResults(string username, string password);
+        List<ValidationResult> ValidationLoginResults(string emailAddress, string password);
     }
 }

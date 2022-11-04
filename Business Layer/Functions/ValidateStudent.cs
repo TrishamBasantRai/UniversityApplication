@@ -16,6 +16,13 @@ namespace Business_Layer.Functions
         public List<ValidationResult> StudentValidation(StudentModel student)
         {
             List<ValidationResult> results = new List<ValidationResult>();
+            StudentRepository studentRepository = new StudentRepository();
+            bool nationalIdentityNumberAlreadyExists = studentRepository.NationalIdentityNumberExists(student.NationalIdentityNumber);
+            bool phoneNumberAlreadyExists = studentRepository.PhoneNumberExists(student.PhoneNumber);
+            if (nationalIdentityNumberAlreadyExists)
+                results.Add(new ValidationResult("There already is an account with this national identity number."));
+            if (phoneNumberAlreadyExists)
+                results.Add(new ValidationResult("There already is an account with this phone number."));
             if (string.IsNullOrEmpty(student.FirstName))
                 results.Add(new ValidationResult("Please enter your first name."));
             if (string.IsNullOrEmpty(student.LastName))
@@ -25,7 +32,7 @@ namespace Business_Layer.Functions
             if (string.IsNullOrEmpty(student.PhoneNumber))
                 results.Add(new ValidationResult("Please enter your phone number."));
             if (student.DateOfBirth == null)
-                results.Add(new ValidationResult("Please enter a DOB"));
+                results.Add(new ValidationResult("Please enter your date of birth"));
             if (student.DateOfBirth > DateTime.Now)
                 results.Add(new ValidationResult("Please enter a valid date of birth."));
             return results;

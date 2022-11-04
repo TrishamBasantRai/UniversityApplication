@@ -11,6 +11,6 @@ namespace DataAccessLayer.Repositories.IRepositories
     internal interface IStudentRepository
     {
         int Insert(StudentModel student);
-        int GetStudentID(string emailAddress);
+        int GetStudentID();
     }
 }

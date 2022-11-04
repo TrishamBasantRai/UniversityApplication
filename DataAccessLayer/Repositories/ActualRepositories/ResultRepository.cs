@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using DataAccessLayer.Common;
+using DataAccessLayer.Entities;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
@@ -18,7 +19,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public bool Insert(ResultModel resultModel)
         {
             StudentRepository studentRepository = new StudentRepository();
-            int StudentID = studentRepository.GetStudentID(HttpContext.Current.Session["EmailAddress"].ToString());
+            int StudentID = studentRepository.GetStudentID();
             SubjectRepository subjectRepository = new SubjectRepository();
             int numberOfRowsAffected;
             _dal.OpenConnection();
@@ -30,17 +31,31 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 
                 for (int i = 0; i < resultModel.SubjectNames.Count; i++)
                 {
-                    //_dal.OpenConnection();
                     command.Parameters.AddWithValue("@SubjectID", subjectRepository.GetSubjectID(resultModel.SubjectNames[i]));
                     command.Parameters.AddWithValue("@Grade", resultModel.Grades[i]);
                     command.Parameters.AddWithValue("@StudentID", StudentID);
                     numberOfRowsAffected = command.ExecuteNonQuery();
                     command.Parameters.Clear();
-                    //_dal.CloseConnection();
                 }
             }
             _dal.CloseConnection();
             return true;
+        }
+        public bool ResultExists(int studentID)
+        {
+            _dal.OpenConnection();
+            SqlConnection conn = _dal.connection;
+            using (conn)
+            {
+                SqlCommand command = new SqlCommand("SELECT TOP 1 StudentID FROM StudentResult WHERE StudentID=@StudentID", conn);
+                command.CommandType = CommandType.Text;
+                command.Parameters.AddWithValue("@StudentID", studentID);
+                SqlDataReader reader = command.ExecuteReader();
+                if (reader.HasRows)
+                    return true;
+            }
+            _dal.CloseConnection();
+            return false;
         }
     }
 }

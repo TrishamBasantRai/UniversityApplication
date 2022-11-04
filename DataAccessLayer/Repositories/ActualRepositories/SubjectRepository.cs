@@ -55,7 +55,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
                 {
                     while (reader.Read())
                     {
-                        subjectID = (int)reader["SubjectID"];
+                        subjectID = Convert.ToInt32(reader["SubjectID"]);
                     }
                 }
             }

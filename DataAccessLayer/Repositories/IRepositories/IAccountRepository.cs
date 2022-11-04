@@ -8,9 +8,10 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IAccountRepository
+    public interface IAccountRepository
     {
         int Insert(UserAccount account);
         UserAccount getAccountByEmailAddress(string emailAddress);
+        bool IsValidUser(string emailAddress, byte[] hashedPassword);
     }
 }
