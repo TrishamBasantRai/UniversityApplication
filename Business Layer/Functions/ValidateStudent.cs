@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Models.ViewModels;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -11,23 +12,25 @@ using System.Threading.Tasks;
 
 namespace Business_Layer.Functions
 {
-    public class ValidateStudent
+    public class ValidateStudent : IValidateStudent
     {
+        private readonly IStudentRepository _studentRepository;
+        public ValidateStudent(IStudentRepository studentRepository)
+        {
+            _studentRepository = studentRepository;
+        }
+
         public List<ValidationResult> StudentValidation(StudentModel student)
         {
             List<ValidationResult> results = new List<ValidationResult>();
-            StudentRepository studentRepository = new StudentRepository();
+            //StudentRepository studentRepository = new StudentRepository();
             bool nationalIdentityNumberAlreadyExists;
             bool phoneNumberAlreadyExists;
-            //if (nationalIdentityNumberAlreadyExists)
-            //    results.Add(new ValidationResult("There already is an account with this national identity number."));
-            //if (phoneNumberAlreadyExists)
-            //    results.Add(new ValidationResult("There already is an account with this phone number."));
             if (string.IsNullOrEmpty(student.NationalIdentityNumber))
                 results.Add(new ValidationResult("Please enter your National Identity Number."));
             else
             {
-                nationalIdentityNumberAlreadyExists = studentRepository.NationalIdentityNumberExists(student.NationalIdentityNumber);
+                nationalIdentityNumberAlreadyExists = _studentRepository.NationalIdentityNumberExists(student.NationalIdentityNumber);
                 if (nationalIdentityNumberAlreadyExists)
                     results.Add(new ValidationResult("There already is an account with this national identity number."));
             }
@@ -41,7 +44,7 @@ namespace Business_Layer.Functions
                 results.Add(new ValidationResult("Please enter your phone number."));
             else
             {
-                phoneNumberAlreadyExists = studentRepository.PhoneNumberExists(student.PhoneNumber);
+                phoneNumberAlreadyExists = _studentRepository.PhoneNumberExists(student.PhoneNumber);
                 if (phoneNumberAlreadyExists)
                     results.Add(new ValidationResult("There already is an account with this phone number."));
             }

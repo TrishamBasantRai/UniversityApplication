@@ -15,15 +15,23 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class ResultRepository : IResultRepository
     {
-        private readonly DAL _dal = new DAL();
+        private readonly IDAL _dal;
+        private readonly IStudentRepository _studentRepository;
+        private readonly ISubjectRepository _subjectRepository;
+        public ResultRepository(IDAL dal, IStudentRepository studentRepository, ISubjectRepository subjectRepository)
+        {
+            _dal = dal;
+            _studentRepository = studentRepository;
+            _subjectRepository = subjectRepository;
+        }
         public bool Insert(ResultModel resultModel)
         {
-            StudentRepository studentRepository = new StudentRepository();
-            int StudentID = studentRepository.GetStudentID();
-            SubjectRepository subjectRepository = new SubjectRepository();
+            //StudentRepository studentRepository = new StudentRepository();
+            int StudentID = _studentRepository.GetStudentID();
+            //SubjectRepository subjectRepository = new SubjectRepository();
             int numberOfRowsAffected;
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             using (conn)
             {
                 SqlCommand command = new SqlCommand("INSERT INTO StudentResult(SubjectID, Grade, StudentID) VALUES(@SubjectID, @Grade, @StudentID)", conn);
@@ -31,7 +39,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 
                 for (int i = 0; i < resultModel.SubjectNames.Count; i++)
                 {
-                    command.Parameters.AddWithValue("@SubjectID", subjectRepository.GetSubjectID(resultModel.SubjectNames[i]));
+                    command.Parameters.AddWithValue("@SubjectID", _subjectRepository.GetSubjectID(resultModel.SubjectNames[i]));
                     command.Parameters.AddWithValue("@Grade", resultModel.Grades[i]);
                     command.Parameters.AddWithValue("@StudentID", StudentID);
                     numberOfRowsAffected = command.ExecuteNonQuery();
@@ -44,7 +52,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public bool ResultExists(int studentID)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             using (conn)
             {
                 SqlCommand command = new SqlCommand("SELECT TOP 1 StudentID FROM StudentResult WHERE StudentID=@StudentID", conn);

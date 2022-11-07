@@ -29,13 +29,13 @@ namespace UniversityApplication.Controllers
             if (Session["emailAddress"] == null)
                 return RedirectToAction("Index", "Login");
             int studentID = _studentRepository.GetStudentID();
-            int invalidStudentID = 0;
-            if (studentID > invalidStudentID)
-                return RedirectToAction("Results", "Student");
+            int invalidStudentID = -1;
+            if (studentID != invalidStudentID)
+                return RedirectToAction("InputResults", "Student");
             return View();
         }
         [HttpPost]
-        public JsonResult PostStudentDetails(StudentModel studentModel)
+        public JsonResult InputDetails(StudentModel studentModel)
         {
             List<ValidationResult> listOfErrors = _studentService.StudentValidate(studentModel);
             return Json(new { data = listOfErrors, hasErrors = listOfErrors.Any(), url = Url.Action("InputResults", "Student") });
@@ -46,17 +46,9 @@ namespace UniversityApplication.Controllers
                 return RedirectToAction("Index", "Login");
             int studentID = _studentRepository.GetStudentID();
             if (_resultRepository.ResultExists(studentID))
-                return RedirectToAction("Status", "Student");
+                return RedirectToAction("StudentApplicationStatus", "Student");
             return View();
         }
-
-        //[HttpPost]
-        //public JsonResult GetSubjects()
-        //{
-        //    SubjectRepository subjectRepository = new SubjectRepository();
-        //    List<string> result = subjectRepository.getSubjectList();
-        //    return Json(new { data = result } );
-        //}
         public ActionResult StudentApplicationStatus()
         {
             if (Session["emailAddress"] == null)

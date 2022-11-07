@@ -15,7 +15,7 @@ function Details(/*e*/) {
     }
 
     var serverCall = new ServerCall({
-        url: "/Subject/Index",
+        url: "/Subject/GetListOfSubjects",
         params: JSON.stringify(), callType: "POST"
     })
 
@@ -43,7 +43,7 @@ function Details(/*e*/) {
     });
 
     var serverCall = new ServerCall({
-        url: "/Grade/Index",
+        url: "/Grade/GetListOfGrades",
         params: JSON.stringify(), callType: "POST"
     });
 
@@ -90,7 +90,7 @@ function Results(e) {
         Grades: SubjectGradesValue
     }
     var serverCall = new ServerCall({
-        url: "/Result/Index",
+        url: "/Result/InputResults",
         params: JSON.stringify(ResultModel), callType: "POST"
     })
     serverCall.xhrCall().then((result) => {

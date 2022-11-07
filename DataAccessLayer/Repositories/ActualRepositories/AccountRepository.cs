@@ -14,11 +14,16 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly DAL _dal = new DAL(); //This will change with use of Unity
+        private readonly IDAL _dal;
+        public AccountRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
+
         public int Insert(UserAccount account)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             int numberOfRowsAffected;
             using (conn)
             {
@@ -37,7 +42,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public UserAccount getAccountByEmailAddress(string emailAddress)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             UserAccount account = new UserAccount();
             using (conn)
             {
@@ -63,7 +68,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public bool IsValidUser(string emailAddress, byte[] hashedPassword)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             bool isValid = false;
             using (conn)
             {

@@ -45,6 +45,8 @@
     <Compile Include="Functions\CalculateScore.cs" />
     <Compile Include="Functions\ICalculateScore.cs" />
     <Compile Include="Functions\IValidateLogin.cs" />
+    <Compile Include="Functions\IValidateRegister.cs" />
+    <Compile Include="Functions\IValidateStudent.cs" />
     <Compile Include="Functions\ValidateLogin.cs" />
     <Compile Include="Functions\ValidateRegister.cs" />
     <Compile Include="Functions\ValidateStudent.cs" />

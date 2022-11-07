@@ -1,6 +1,7 @@
 ﻿using Business_Layer.Services;
 using DataAccessLayer.Models.ViewModels;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,19 +12,21 @@ namespace UniversityApplication.Controllers
 {
     public class AdminController : Controller
     {
-        // GET: Admin
+        private readonly IStudentSummaryRepository _studentSummaryRepository;
+        public AdminController(IStudentSummaryRepository studentSummaryRepository)
+        {
+            _studentSummaryRepository = studentSummaryRepository;
+        }
         public ActionResult Index()
         {
             if (Session["emailAddress"] == null)
                 return RedirectToAction("Index", "Login");
             return View();
         }
-
         [HttpPost]
-        public JsonResult GetSummary()
+        public JsonResult GetSummaryOfStudentsApplied()
         {
-            StudentSummaryRepository studentSummaryRepository = new StudentSummaryRepository();
-            List<StudentSummaryModel> result = studentSummaryRepository.GetStudentSummary();
+            List<StudentSummaryModel> result = _studentSummaryRepository.GetStudentSummary();
             return Json(new { data = result });
         }
     }

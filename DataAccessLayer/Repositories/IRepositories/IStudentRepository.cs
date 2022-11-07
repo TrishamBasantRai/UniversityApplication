@@ -12,5 +12,7 @@ namespace DataAccessLayer.Repositories.IRepositories
     {
         int Insert(StudentModel student);
         int GetStudentID();
+        bool NationalIdentityNumberExists(string nationalIdentityNumber);
+        bool PhoneNumberExists(string phoneNumber);
     }
 }

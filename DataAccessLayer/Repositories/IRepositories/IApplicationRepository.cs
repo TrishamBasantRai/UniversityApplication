@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IApplicationRepository
+    public interface IApplicationRepository
     {
         bool Insert(ApplicationModel applicationModel);
     }

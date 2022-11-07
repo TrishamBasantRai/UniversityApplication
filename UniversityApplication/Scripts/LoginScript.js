@@ -16,7 +16,7 @@ function SignIn(e) {
     };
 
     var serverCall = new ServerCall({
-        url: "/Login/Index",
+        url: "/Login/LogIntoAccount",
         params: JSON.stringify(LoginModel), callType: "POST"
     })
     serverCall.xhrCall().then((result) => {

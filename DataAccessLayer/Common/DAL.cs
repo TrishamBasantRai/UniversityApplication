@@ -8,21 +8,21 @@ using System.Configuration;
 
 namespace DataAccessLayer.Common
 {
-    public class DAL
+    public class DAL : IDAL
     {
-        public string connectionString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
-        public SqlConnection connection;
+        private readonly string _connectionString = ConfigurationManager.ConnectionStrings["DBCS"].ConnectionString;
+        public SqlConnection Connection { get; private set; }
         public void OpenConnection()
         {
-            connection = new SqlConnection(connectionString);
-            connection.Open();
+            Connection = new SqlConnection(_connectionString);
+            Connection.Open();
         }
         public void CloseConnection()
         {
-            if (connection != null && connection.State == System.Data.ConnectionState.Open)
+            if (Connection != null && Connection.State == System.Data.ConnectionState.Open)
             {
-                connection.Close();
-                connection.Dispose();
+                Connection.Close();
+                Connection.Dispose();
             }
         }
     }

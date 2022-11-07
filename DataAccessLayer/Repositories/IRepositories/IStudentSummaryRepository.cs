@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IStudentSummaryRepository
+    public interface IStudentSummaryRepository
     {
         List<StudentSummaryModel> GetStudentSummary();
     }

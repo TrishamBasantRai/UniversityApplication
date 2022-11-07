@@ -1,4 +1,5 @@
 ﻿using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,17 +10,15 @@ namespace UniversityApplication.Controllers
 {
     public class SubjectController : Controller
     {
-        // GET: Subject
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        [HttpPost]
-        public JsonResult Index()
+        private readonly ISubjectRepository _subjectRepository;
+        public SubjectController(ISubjectRepository subjectRepository)
         {
-            SubjectRepository subjectRepository = new SubjectRepository();
-            List<string> result = subjectRepository.getSubjectList();
+            _subjectRepository = subjectRepository;
+        }
+        [HttpPost]
+        public JsonResult GetListOfSubjects()
+        {
+            List<string> result = _subjectRepository.getSubjectList();
             return Json(new { data = result });
         }
     }

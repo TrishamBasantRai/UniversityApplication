@@ -1,6 +1,6 @@
 ﻿function fetchStudentInfo() {
     var serverCall = new ServerCall({
-        url: "/Admin/GetSummary",
+        url: "/Admin/GetSummaryOfStudentsApplied",
         params: JSON.stringify(), callType: "POST"
     })
 

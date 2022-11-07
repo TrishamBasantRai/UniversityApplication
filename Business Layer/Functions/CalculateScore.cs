@@ -1,6 +1,7 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Models.ViewModels;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,17 +13,22 @@ namespace Business_Layer.Functions
 {
     public class CalculateScore : ICalculateScore
     {
+        private readonly IGradeRepository _gradeRepository;
+        public CalculateScore(IGradeRepository gradeRepository)
+        {
+            _gradeRepository = gradeRepository;
+        }
+
         public int CalculateTotalScore(ResultModel resultModel)
         {
-            GradeRepository gradeRepository = new GradeRepository();
-            List<GradeDetails> gradeDetailsList = new List<GradeDetails>();
-            gradeDetailsList = gradeRepository.GetGradeDetails();
+            //GradeRepository gradeRepository = new GradeRepository();
+            List<GradeDetails> gradeDetailsList = _gradeRepository.GetGradeDetails();
             Dictionary<char, byte> gradeAssociation = new Dictionary<char, byte>();
             for (int i = 0; i < gradeDetailsList.Count; i++)
                 gradeAssociation.Add(gradeDetailsList[i].Grade, gradeDetailsList[i].GradePoints);
             int totalScore = 0;
             for(int i=0; i < resultModel.Grades.Count; i++)
-                totalScore = totalScore + gradeAssociation[resultModel.Grades[i]];
+                totalScore += gradeAssociation[resultModel.Grades[i]];
             return totalScore;
         }
     }

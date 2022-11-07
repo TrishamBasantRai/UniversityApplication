@@ -12,18 +12,16 @@ namespace UniversityApplication.Controllers
 {
     public class ResultController : Controller
     {
-        // GET: Result
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-
-        [HttpPost]
-        public JsonResult Index(ResultModel resultModel)
+        private readonly IResultService _resultService;
+        public ResultController(IResultService resultService)
         {
-            ResultService resultService = new ResultService();
-            bool result = resultService.InputResult(resultModel);
-            return Json(new { data = result, url = Url.Action("Status", "Student") });
+            _resultService = resultService;
+        }
+        [HttpPost]
+        public JsonResult InputResults(ResultModel resultModel)
+        {
+            bool result = _resultService.InputResult(resultModel);
+            return Json(new { data = result, url = Url.Action("StudentApplicationStatus", "Student") });
         }
     }
 }

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IGradeRepository
+    public interface IGradeRepository
     {
         List<GradeDetails> GetGradeDetails();
     }

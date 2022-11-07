@@ -1,6 +1,8 @@
+using BusinesLayer.Functions;
 using BusinesLayer.Services;
 using Business_Layer.Functions;
 using Business_Layer.Services;
+using DataAccessLayer.Common;
 using DataAccessLayer.Repositories.ActualRepositories;
 using DataAccessLayer.Repositories.IRepositories;
 using System;
@@ -47,14 +49,31 @@ namespace UniversityApplication
 
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
-            container.RegisterType<IAccountRepository, AccountRepository>();
+            container.RegisterType<IDAL, DAL>();
+
+            container.RegisterType<ICalculateScore, CalculateScore>();
             container.RegisterType<IValidateLogin, ValidateLogin>();
+            container.RegisterType<IValidateRegister, ValidateRegister>();
+            container.RegisterType<IValidateStudent, ValidateStudent>();
+
+
+            container.RegisterType<IAccountRepository, AccountRepository>();
+            container.RegisterType<IRoleRepository, RoleRepository>();
+            container.RegisterType<IGradeRepository, GradeRepository>();
+            container.RegisterType<IStudentSummaryRepository, StudentSummaryRepository>();
+            container.RegisterType<ISubjectRepository, SubjectRepository>();
+            container.RegisterType<IResultRepository, ResultRepository>();
+            container.RegisterType<IStudentRepository, StudentRepository>();
+            container.RegisterType<IApplicationRepository, ApplicationRepository>();
+
+            container.RegisterType<IValidateLogin, ValidateLogin>();
+            container.RegisterType<IValidateRegister, ValidateRegister>();
+            container.RegisterType<IValidateStudent, ValidateStudent>();
+
             container.RegisterType<ILoginService, LoginService>();
             container.RegisterType<IRegisterService, RegisterService>();
-            container.RegisterType<IRoleRepository, RoleRepository>();
-            container.RegisterType<IStudentRepository, StudentRepository>();
+            container.RegisterType<IResultService, ResultService>();
             container.RegisterType<IStudentService, StudentService>();
-            container.RegisterType<IResultRepository, ResultRepository>();
         }
     }
 }

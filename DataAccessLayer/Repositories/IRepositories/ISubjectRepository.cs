@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface ISubjectRepository
+    public interface ISubjectRepository
     {
         List<string> getSubjectList();
         int GetSubjectID(string subjectName);

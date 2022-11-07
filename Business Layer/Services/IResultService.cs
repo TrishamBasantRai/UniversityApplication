@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Business_Layer.Services
 {
-    internal interface IResultService
+    public interface IResultService
     {
         bool InputResult(ResultModel resultModel);
     }

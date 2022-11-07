@@ -16,11 +16,15 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class SubjectRepository : ISubjectRepository
     {
-        DAL _dal = new DAL();
+        private readonly IDAL _dal;
+        public SubjectRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
         public List<string> getSubjectList()
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             List<string> subjectNames = new List<string>();
             using (conn)
             {
@@ -42,7 +46,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public int GetSubjectID(string subjectName)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             List<string> subjectNames = new List<string>();
             int subjectID = 1;
             using (conn)

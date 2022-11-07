@@ -18,12 +18,16 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class StudentRepository : IStudentRepository
     {
-        private readonly DAL _dal = new DAL(); //This will change with use of Unity
+        private readonly IDAL _dal;
+        public StudentRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
 
         public int GetStudentID()
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             int invalidStudentID = -1;
             int StudentID = invalidStudentID;
             using (conn)
@@ -48,7 +52,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         {
             int numberOfRowsAffected;
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             using (conn)
             {
                 SqlCommand command = new SqlCommand("INSERT INTO StudentDetails(NationalIdentityNumber, FirstName, LastName, Address, PhoneNumber, DateOfBirth, GuardianName, UserAccountID) VALUES(@NationalIdentityNumber, @FirstName, @LastName, @Address, @PhoneNumber, @DateOfBirth, @GuardianName, @UserAccountID)", conn);
@@ -71,7 +75,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public bool NationalIdentityNumberExists(string nationalIdentityNumber)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             bool alreadyExists = false;
             using (conn)
             {
@@ -88,7 +92,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public bool PhoneNumberExists(string phoneNumber)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             bool alreadyExists = false;
             using (conn)
             {

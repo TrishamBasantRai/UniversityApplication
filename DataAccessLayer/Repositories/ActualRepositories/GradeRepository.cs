@@ -13,11 +13,15 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class GradeRepository : IGradeRepository
     {
-        DAL _dal = new DAL();
+        private readonly IDAL _dal;
+        public GradeRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
         public List<GradeDetails> GetGradeDetails()
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             List<GradeDetails> gradeDetails = new List<GradeDetails>();
             using (conn)
             {
@@ -28,10 +32,6 @@ namespace DataAccessLayer.Repositories.ActualRepositories
                 {
                     while (reader.Read())
                     {
-                        //subjectList.Add(new Subject
-                        //{
-                        //    SubjectName = reader["SubjectName"].ToString()
-                        //});
                         gradeDetails.Add(new GradeDetails()
                         {
                             Grade = Convert.ToChar(reader["Grade"]),

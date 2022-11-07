@@ -1,5 +1,6 @@
 ﻿using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +11,15 @@ namespace UniversityApplication.Controllers
 {
     public class GradeController : Controller
     {
-        // GET: Grade
-        //public ActionResult Index()
-        //{
-        //    return View();
-        //}
-        [HttpPost]
-        public JsonResult Index()
+        private readonly IGradeRepository _gradeRepository;
+        public GradeController(IGradeRepository gradeRepository)
         {
-            GradeRepository gradeRepository = new GradeRepository();
-            List<GradeDetails> result = gradeRepository.GetGradeDetails();
+            _gradeRepository = gradeRepository;
+        }
+        [HttpPost]
+        public JsonResult GetListOfGrades()
+        {
+            List<GradeDetails> result = _gradeRepository.GetGradeDetails();
             return Json(new { data = result });
         }
     }

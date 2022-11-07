@@ -14,11 +14,15 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly DAL _dal = new DAL(); //This will change with use of Unity
+        private readonly IDAL _dal;
+        public RoleRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
         public int GetRoleIDByRoleName(string roleName)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             UserRole role = new UserRole();
             using (conn)
             {
@@ -41,7 +45,7 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         public string GetRoleNameByEmailAddress(string emailAddress)
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             UserRole role = new UserRole();
             string roleName = "";
             using (conn)

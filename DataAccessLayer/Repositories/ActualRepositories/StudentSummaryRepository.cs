@@ -13,11 +13,15 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class StudentSummaryRepository : IStudentSummaryRepository
     {
-        private readonly DAL _dal = new DAL();
+        private readonly IDAL _dal;
+        public StudentSummaryRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
         public List<StudentSummaryModel> GetStudentSummary()
         {
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             List<StudentSummaryModel> studentSummaryList = new List<StudentSummaryModel>();
             using (conn)
             {

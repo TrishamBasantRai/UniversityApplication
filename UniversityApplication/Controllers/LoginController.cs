@@ -29,19 +29,19 @@ namespace UniversityApplication.Controllers
             return View();
         }
         [HttpPost]
-        public JsonResult Index(string emailAddress, string password)
+        public JsonResult LogIntoAccount(string emailAddress, string password)
         {
-            List<ValidationResult> result = _loggingIn.LoginResults(emailAddress, password);
+            List<ValidationResult> listOfErrors = _loggingIn.LoginResults(emailAddress, password);
             UserAccount loginAccount = _accountRepository.getAccountByEmailAddress(emailAddress);
             int loginAccountID = loginAccount.UserAccountID;
             string accountRole = "Student";
-            if (!result.Any())
+            if (!listOfErrors.Any())
             {
                 Session["emailAddress"] = emailAddress;
                 Session["userAccountID"] = loginAccountID;
                 accountRole = _roleRepository.GetRoleNameByEmailAddress(emailAddress);
             }
-            return Json(new { data = result, hasErrors = result.Any(), url = Url.Action("Index", accountRole) });
+            return Json(new { data = listOfErrors, hasErrors = listOfErrors.Any(), url = Url.Action("Index", accountRole) });
         }
     }
 }

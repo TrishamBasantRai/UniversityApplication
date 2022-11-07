@@ -14,12 +14,16 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class ApplicationRepository : IApplicationRepository
     {
-        private readonly DAL _dal = new DAL();
+        private readonly IDAL _dal;
+        public ApplicationRepository(IDAL dal)
+        {
+            _dal = dal;
+        }
         public bool Insert(ApplicationModel applicationModel)
         {
             int numberOfRowsAffected;
             _dal.OpenConnection();
-            SqlConnection conn = _dal.connection;
+            SqlConnection conn = _dal.Connection;
             using (conn)
             {
                 SqlCommand command = new SqlCommand("INSERT INTO Studentapplication(StudentResultScore, StudentApplicationStatus, StudentID) VALUES(@StudentResultScore, @StudentApplicationStatus, @StudentID)", conn);
