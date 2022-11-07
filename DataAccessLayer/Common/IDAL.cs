@@ -10,7 +10,6 @@ namespace DataAccessLayer.Common
     public interface IDAL
     {
         SqlConnection Connection { get; }
-
         void OpenConnection();
         void CloseConnection();
     }

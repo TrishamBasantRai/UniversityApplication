@@ -1,7 +1,4 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
+﻿@{ Layout = null; }
 
 <head>
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
@@ -11,7 +8,7 @@
     <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
     <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
 
-    <title>Register</title>
+    <title>University Application - Login</title>
 </head>
 
 <div class="PageContainer">
@@ -24,5 +21,7 @@
         <input class="submitInput" type="submit" value="Log in" id="buttonLogin" />
     </form>
     <span role="alert" id="errorPane" aria-hidden="true" style="color:red"></span>
+    <p>You don't have an account yet?</p>
+    <a href="/Register/Index">Register Now</a>
 </div>
 
