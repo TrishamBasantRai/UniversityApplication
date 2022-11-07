@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace BusinesLayer.Services
 {
-    internal interface IRegisterService
+    public interface IRegisterService
     {
         List<ValidationResult> RegisterAccount(string emailAddress, string password, string confirmPassword, string roleName);
     }

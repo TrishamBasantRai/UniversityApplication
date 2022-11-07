@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IRoleRepository
+    public interface IRoleRepository
     {
         int GetRoleIDByRoleName(string roleName);
         string GetRoleNameByEmailAddress(string emailAddress);

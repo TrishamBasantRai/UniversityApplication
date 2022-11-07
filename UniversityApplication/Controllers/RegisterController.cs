@@ -10,17 +10,20 @@ namespace UniversityApplication.Controllers
 {
     public class RegisterController : Controller
     {
+        private readonly IRegisterService _registering;
+        public RegisterController(IRegisterService registering)
+        {
+            _registering = registering;
+        }
         public ActionResult Index()
         {
             return View();
         }
-
         [HttpPost]
-        public JsonResult Index(string emailAddress, string password, string confirmPassword)
+        public JsonResult RegisterNewAccount(string emailAddress, string password, string confirmPassword)
         {
-            RegisterService registering = new RegisterService();
-            List<ValidationResult> result = registering.RegisterAccount(emailAddress, password, confirmPassword, "Student");
-            return Json(new { data = result, hasErrors = result.Any(), url = Url.Action("Index", "Login") });
+            List<ValidationResult> listOfErrors = _registering.RegisterAccount(emailAddress, password, confirmPassword, "Student");
+            return Json(new { data = listOfErrors, hasErrors = listOfErrors.Any(), url = Url.Action("Index", "Login") });
         }
     }
 }

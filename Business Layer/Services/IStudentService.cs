@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Business_Layer.Services
 {
-    internal interface IStudentService
+    public interface IStudentService
     {
         List<ValidationResult> StudentValidate(StudentModel student);
     }

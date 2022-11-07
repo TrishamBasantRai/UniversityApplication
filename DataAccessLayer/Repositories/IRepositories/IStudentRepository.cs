@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IStudentRepository
+    public interface IStudentRepository
     {
         int Insert(StudentModel student);
         int GetStudentID();

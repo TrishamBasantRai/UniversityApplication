@@ -7,8 +7,9 @@ using System.Threading.Tasks;
 
 namespace DataAccessLayer.Repositories.IRepositories
 {
-    internal interface IResultRepository
+    public interface IResultRepository
     {
         bool Insert(ResultModel resultModel);
+        bool ResultExists(int studentID);
     }
 }

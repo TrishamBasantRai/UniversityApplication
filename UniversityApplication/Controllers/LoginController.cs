@@ -1,6 +1,7 @@
 ﻿using BusinesLayer.Services;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.ActualRepositories;
+using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -15,33 +16,32 @@ namespace UniversityApplication.Controllers
     public class LoginController : Controller
     {
         private readonly ILoginService _loggingIn;
-
-        public LoginController(ILoginService logginIn)
+        private readonly IAccountRepository _accountRepository;
+        private readonly IRoleRepository _roleRepository;
+        public LoginController(ILoginService loggingIn, IAccountRepository accountRepository, IRoleRepository roleRepository)
         {
-            _loggingIn = logginIn;
+            _loggingIn = loggingIn;
+            _accountRepository = accountRepository;
+            _roleRepository = roleRepository;
         }
         public ActionResult Index()
         {
             return View();
         }
-
         [HttpPost]
         public JsonResult Index(string emailAddress, string password)
         {
-            //LoginService loggingIn = new LoginService();
             List<ValidationResult> result = _loggingIn.LoginResults(emailAddress, password);
-            AccountRepository accountRepository = new AccountRepository();
-            UserAccount loginAccount = accountRepository.getAccountByEmailAddress(emailAddress);
-            RoleRepository roleRepository = new RoleRepository();
-            string role = "Student";
+            UserAccount loginAccount = _accountRepository.getAccountByEmailAddress(emailAddress);
             int loginAccountID = loginAccount.UserAccountID;
+            string accountRole = "Student";
             if (!result.Any())
             {
                 Session["emailAddress"] = emailAddress;
                 Session["userAccountID"] = loginAccountID;
-                role = roleRepository.GetRoleNameByEmailAddress(emailAddress);
+                accountRole = _roleRepository.GetRoleNameByEmailAddress(emailAddress);
             }
-            return Json(new { data = result, hasErrors = result.Any(), url = Url.Action("Index", role) });
+            return Json(new { data = result, hasErrors = result.Any(), url = Url.Action("Index", accountRole) });
         }
     }
 }

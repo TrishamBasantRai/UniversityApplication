@@ -1,36 +1,41 @@
-﻿$(function () {
-    let form = document.querySelector('form');
+﻿function buildErrorMessage(ul, errorMessage) {
+    var li = document.createElement('LI');
+    li.innerHTML = errorMessage;
+    ul.appendChild(li);
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        return false;
-    });
-    $("#buttonRegister").click(function () {
-        var emailAddress = $("#emailAddress").val();
-        var password = $("#password").val();
-        var authObj = { EmailAddress: emailAddress, Password: password, ConfirmPassword: confirmPassword};
-        $.ajax({
-            type: "POST",
-            url: "/Register",
-            data: authObj,
-            dataType: "json",
-            success: function (response) {
-                if (response.result) {
-                    toastr.success('Email Registered! You may now login.');
-                    window.location = response.url;
-                }
-                else {
-                    toastr.error('Email already exists, please use another email.');
-                    return false;
-                }
-            },
-            failure: function (response) {
-                toastr.error('Unable to make request!');
-            },
-            error: function (response) {
-                toastr.error('Error. Please contact the System Administrator.');
+    return ul;
+}
 
+
+function Register(e) {
+    e.preventDefault();
+
+    var RegisterModel = {
+        EmailAddress: this.emailAddress.value,
+        Password: this.password.value,
+        ConfirmPassword: this.confirmPassword.value
+    };
+
+    var serverCall = new ServerCall({
+        url: "/Register/RegisterNewAccount",
+        params: JSON.stringify(RegisterModel), callType: "POST"
+    })
+    serverCall.xhrCall().then((result) => {
+
+        if (result.hasErrors) {
+            var ul = document.createElement('UL');
+            const errorPane = document.getElementById("errorPane");
+            errorPane.innerHTML = ""; 
+
+            for (var i = 0; i < result.data.length; i++) {
+                buildErrorMessage(ul, result.data[i].ErrorMessage);
             }
-        });
+
+            errorPane.appendChild(ul);
+        }
+        else {
+            window.location = result.url;
+        }
     });
-});
+
+}

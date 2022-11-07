@@ -24,7 +24,8 @@ namespace DataAccessLayer.Repositories.ActualRepositories
         {
             _dal.OpenConnection();
             SqlConnection conn = _dal.connection;
-            int StudentID = -1;
+            int invalidStudentID = -1;
+            int StudentID = invalidStudentID;
             using (conn)
             {
                 SqlCommand command = new SqlCommand("Select StudentID FROM StudentDetails WHERE UserAccountID = @UserAccountID", conn);

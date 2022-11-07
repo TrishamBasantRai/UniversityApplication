@@ -21,7 +21,7 @@ function Details(e) {
     };
 
     var serverCall = new ServerCall({
-        url: "/Student/Index",
+        url: "/Student/PostStudentDetails",
         params: JSON.stringify(studentModel), callType: "POST"
     })
     serverCall.xhrCall().then((result) => {

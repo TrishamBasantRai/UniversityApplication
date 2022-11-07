@@ -19,9 +19,7 @@ namespace Business_Layer.Services
             List<ValidationResult> results = validateStudent.StudentValidation(studentModel);
             StudentRepository studentRepository = new StudentRepository();
             if(results.Count == 0)
-            {
                 studentRepository.Insert(studentModel);
-            }
             return results;
         }
     }

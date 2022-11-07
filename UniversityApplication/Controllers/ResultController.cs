@@ -23,7 +23,7 @@ namespace UniversityApplication.Controllers
         {
             ResultService resultService = new ResultService();
             bool result = resultService.InputResult(resultModel);
-            return Json(new { data = result, url = Url.Action("Index", "Login") });
+            return Json(new { data = result, url = Url.Action("Status", "Student") });
         }
     }
 }

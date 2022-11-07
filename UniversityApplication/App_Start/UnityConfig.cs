@@ -1,5 +1,6 @@
 using BusinesLayer.Services;
 using Business_Layer.Functions;
+using Business_Layer.Services;
 using DataAccessLayer.Repositories.ActualRepositories;
 using DataAccessLayer.Repositories.IRepositories;
 using System;
@@ -49,6 +50,11 @@ namespace UniversityApplication
             container.RegisterType<IAccountRepository, AccountRepository>();
             container.RegisterType<IValidateLogin, ValidateLogin>();
             container.RegisterType<ILoginService, LoginService>();
+            container.RegisterType<IRegisterService, RegisterService>();
+            container.RegisterType<IRoleRepository, RoleRepository>();
+            container.RegisterType<IStudentRepository, StudentRepository>();
+            container.RegisterType<IStudentService, StudentService>();
+            container.RegisterType<IResultRepository, ResultRepository>();
         }
     }
 }

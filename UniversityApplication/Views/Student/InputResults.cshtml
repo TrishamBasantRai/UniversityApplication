@@ -9,10 +9,14 @@
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <script type="text/javascript" src="~/Scripts/ResultScript.js"></script>
+    <script type="text/javascript" src="~/Scripts/NewResultScript.js"></script>
     <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
     <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
     <link rel="stylesheet" href="~/CSS/ResultStylesheet.css" />
+
+    <script>
+        Details();
+    </script>
 
     <title>Register</title>
 </head>
@@ -22,30 +26,19 @@
         <h2 class="PageTitle">Student Details</h2>
         <form method="POST" class="formContainer" id="form" onsubmit="Results(event)">
             <div>
-                <button>Add a Subject</button>
-                <button>Remove a Subject</button>
+                <button type="button" onclick="Add()">Add a Subject</button>
+                <button type="button" onclick="Remove()">Remove a Subject</button>
             </div>
             <table class="tableContainer" border="1">
-                <tr>
-                    <th>Blank</th>
-                    <th>Subject</th>
-                    <th>Result for that subject</th>
-                </tr>
-                <tr>
-                    <td>Subject 1</td>
-                    <td id="subjectOne" name="subjectOne"></td>
-                    <td id="gradeOne" name="gradeOne"></td>
-                </tr>
-                <tr>
-                    <td>Subject 2</td>
-                    <td id="subjectTwo" name="subjectTwo"></td>
-                    <td id="gradeTwo" name="gradeTwo"></td>
-                </tr>
-                <tr>
-                    <td>Subject 3</td>
-                    <td id="subjectThree" name="subjectThree"></td>
-                    <td id="gradeThree" name="gradeThree"></td>
-                </tr>
+                <thead>
+                    <tr>
+                        <th>Blank</th>
+                        <th>Subject</th>
+                        <th>Result for that subject</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
             </table>
             <input class="submitInput" type="submit" value="Submit Results" id="buttonRegister" />
         </form>
