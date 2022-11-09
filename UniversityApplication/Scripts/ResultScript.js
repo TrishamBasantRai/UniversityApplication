@@ -97,6 +97,7 @@ function Results(e) {
             window.location = result.url;
         }
         else {
+            toastr.error("Error encountered! Please check them!");
             let errorPane = document.getElementById('errorPane');
             var html = `<ul>`;
             for (let errors of result.data) {

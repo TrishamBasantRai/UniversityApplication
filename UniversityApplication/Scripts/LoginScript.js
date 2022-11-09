@@ -13,6 +13,7 @@
     serverCall.xhrCall().then((result) => {
 
         if (result.hasErrors) {
+            toastr.error("Error encountered! Please check them!");
             let errorPane = document.getElementById('errorPane');
             var html = `<ul>`;
             for (let errors of result.data) {
@@ -22,6 +23,7 @@
             errorPane.innerHTML = html;
         }
         else {
+            toastr.success("Logged in!");
             window.location = result.url;
         }
     });

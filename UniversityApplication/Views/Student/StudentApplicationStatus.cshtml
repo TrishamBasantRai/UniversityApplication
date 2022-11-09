@@ -1,12 +1,16 @@
 ﻿<html>
-    <head>
-        <script type="text/javascript" src="~/Scripts/StatusScript.js"></script>
-        <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
-        <link rel="stylesheet" href="~/CSS/StatusStylesheet.css" />
-        <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
-        <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
-        <title>University Application - Status</title>
-    </head>
+<head>
+    <script type="text/javascript" src="~/Scripts/StatusScript.js"></script>
+    <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <script type="text/javascript" src="~/Scripts/LogoutScript.js"></script>
+    <link rel="stylesheet" href="~/CSS/StatusStylesheet.css" />
+    <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
+    <link rel="stylesheet" href="~/CSS/MainStyleSheet.css" />
+    <title>University Application - Status</title>
+</head>
     <body>
         <div class="PageContainer">
             <h2 class="PageTitle">Application Status</h2>
@@ -19,6 +23,6 @@
         <script>
             fetchStudentStatus();
         </script>
-        <center><button type="button" onclick="location.href='/Logout/Index';" class="logoutButton">Log out</button></center>
+        <center><button type="button" class="logoutButton" onclick="LogOut()">Log out</button></center>
     </body>
 </html>

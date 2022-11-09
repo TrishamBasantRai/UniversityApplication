@@ -1,15 +1,18 @@
 ﻿<html>
-    <head>
-        <script type="text/javascript" src="~/Scripts/ResultScript.js"></script>
-        <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
-        <link rel="stylesheet" href="~/CSS/MainStyleSheet.css" />
-        <link rel="stylesheet" href="~/CSS/ResultStylesheet.css" />
-        <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
-        <script>
-            Details();
-        </script>
-        <title>University Application - Results</title>
-    </head>
+<head>
+    <script type="text/javascript" src="~/Scripts/ResultScript.js"></script>
+    <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <link rel="stylesheet" href="~/CSS/MainStyleSheet.css" />
+    <link rel="stylesheet" href="~/CSS/ResultStylesheet.css" />
+    <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
+    <script>
+        Details();
+    </script>
+    <title>University Application - Results</title>
+</head>
     <body>
         <div class="PageContainer">
             <h2 class="PageTitle">Student Results</h2>
@@ -32,7 +35,7 @@
                 </table>
                 <input class="submitInput" type="submit" value="Submit Results" id="buttonRegister" />
             </form>
-            <center><button type="button" onclick="location.href='/Logout/Index';" class="logoutButton">Log out</button></center>
+            <center><button type="button" class="logoutButton" onclick="LogOut()">Log out</button></center>
         </div>
         <script>
             Details();
