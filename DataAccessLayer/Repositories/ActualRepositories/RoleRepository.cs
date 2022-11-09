@@ -14,55 +14,39 @@ namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class RoleRepository : IRoleRepository
     {
-        private readonly IDAL _dal;
-        public RoleRepository(IDAL dal)
+        private readonly IDatabaseCommand _databaseCommand;
+        private const string GetRoleIDByItsCorrespondingName = @"SELECT RoleID, RoleName FROM UserRole WHERE RoleName=@RoleName";
+        private const string GetRoleNameByCorrespondingEmailAddress = @"SELECT RoleName FROM UserRole 
+                                                                        INNER JOIN UserAccount ON UserRole.RoleID = UserAccount.RoleID 
+                                                                        WHERE UserAccount.EmailAddress=@EmailAddress";
+        public RoleRepository(IDatabaseCommand databaseCommand)
         {
-            _dal = dal;
+            _databaseCommand = databaseCommand;
         }
         public int GetRoleIDByRoleName(string roleName)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
             UserRole role = new UserRole();
-            using (conn)
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@RoleName", roleName));
+            var dataTable = _databaseCommand.GetDataWithConditions(GetRoleIDByItsCorrespondingName, parameters);
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("SELECT RoleID, RoleName FROM UserRole WHERE RoleName=@RoleName", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@RoleName", roleName);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        role.RoleID = Convert.ToInt32(reader["RoleID"]);
-                        role.RoleName = reader["RoleName"].ToString();
-                    }
-                }
+                role.RoleID = Convert.ToInt32(row["RoleID"]);
+                role.RoleName = row["RoleName"].ToString();
             }
-            _dal.CloseConnection();
             return role.RoleID;
+
         }
         public string GetRoleNameByEmailAddress(string emailAddress)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            UserRole role = new UserRole();
             string roleName = "";
-            using (conn)
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@EmailAddress", emailAddress));
+            var dataTable = _databaseCommand.GetDataWithConditions(GetRoleNameByCorrespondingEmailAddress, parameters);
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("SELECT RoleName FROM UserRole INNER JOIN UserAccount ON UserRole.RoleID = UserAccount.RoleID WHERE UserAccount.EmailAddress=@EmailAddress", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@EmailAddress", emailAddress);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        roleName = reader["RoleName"].ToString();
-                    }
-                }
+                roleName = row["RoleName"].ToString();
             }
-            _dal.CloseConnection();
             return roleName;
         }
     }

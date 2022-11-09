@@ -23,14 +23,13 @@ namespace Business_Layer.Functions
         public List<ValidationResult> StudentValidation(StudentModel student)
         {
             List<ValidationResult> results = new List<ValidationResult>();
-            //StudentRepository studentRepository = new StudentRepository();
             bool nationalIdentityNumberAlreadyExists;
             bool phoneNumberAlreadyExists;
             if (string.IsNullOrEmpty(student.NationalIdentityNumber))
                 results.Add(new ValidationResult("Please enter your National Identity Number."));
             else
             {
-                nationalIdentityNumberAlreadyExists = _studentRepository.NationalIdentityNumberExists(student.NationalIdentityNumber);
+                nationalIdentityNumberAlreadyExists = _studentRepository.NationalIdentityNumberAlreadyExists(student.NationalIdentityNumber);
                 if (nationalIdentityNumberAlreadyExists)
                     results.Add(new ValidationResult("There already is an account with this national identity number."));
             }
@@ -44,7 +43,7 @@ namespace Business_Layer.Functions
                 results.Add(new ValidationResult("Please enter your phone number."));
             else
             {
-                phoneNumberAlreadyExists = _studentRepository.PhoneNumberExists(student.PhoneNumber);
+                phoneNumberAlreadyExists = _studentRepository.PhoneNumberAlreadyExists(student.PhoneNumber);
                 if (phoneNumberAlreadyExists)
                     results.Add(new ValidationResult("There already is an account with this phone number."));
             }

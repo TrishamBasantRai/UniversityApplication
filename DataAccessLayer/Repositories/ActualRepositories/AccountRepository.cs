@@ -9,78 +9,64 @@ using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.IRepositories;
+using System.Data.Common;
+using System.Reflection;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class AccountRepository : IAccountRepository
     {
-        private readonly IDAL _dal;
-        public AccountRepository(IDAL dal)
+        private readonly IDatabaseCommand _databaseCommand;
+        private const string InsertNewAccount = @"INSERT INTO UserAccount(EmailAddress, HashedPassword, UserAccountStatus, RoleID) 
+                                                  VALUES(@EmailAddress, @HashedPassword, @UserAccountStatus, @RoleID)";
+        private const string SelectAccountUsingEmailAddress = @"SELECT UserAccountID, EmailAddress, HashedPassword, UserAccountStatus, RoleID 
+                                                                FROM UserAccount WHERE EmailAddress=@emailAddress";
+        private const string AuthenticateUserAccount = @"SELECT EmailAddress 
+                                                         FROM UserAccount WHERE EmailAddress=@emailAddress AND HashedPassword = @hashedPassword";
+        public AccountRepository(IDatabaseCommand databaseCommand)
         {
-            _dal = dal;
+            _databaseCommand = databaseCommand;
         }
 
-        public int Insert(UserAccount account)
+        public bool InsertedNewAccount(UserAccount newAccount)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            int numberOfRowsAffected;
-            using (conn)
+            try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO UserAccount(EmailAddress, HashedPassword, UserAccountStatus, RoleID) VALUES(@EmailAddress, @HashedPassword, @UserAccountStatus, @RoleID)", conn);
-                command.CommandType = CommandType.Text;
-
-                command.Parameters.AddWithValue("@EmailAddress", account.EmailAddress);
-                command.Parameters.AddWithValue("@HashedPassword", account.HashedPassword);
-                command.Parameters.AddWithValue("@UserAccountStatus", account.UserAccountStatus);
-                command.Parameters.AddWithValue("@RoleID", account.RoleID);
-                numberOfRowsAffected = command.ExecuteNonQuery();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@EmailAddress", newAccount.EmailAddress));
+                parameters.Add(new SqlParameter("@HashedPassword", newAccount.HashedPassword));
+                parameters.Add(new SqlParameter("@UserAccountStatus", newAccount.UserAccountStatus));
+                parameters.Add(new SqlParameter("@RoleID", newAccount.RoleID));
+                return _databaseCommand.InsertUpdateData(InsertNewAccount, parameters);
             }
-            _dal.CloseConnection();
-            return numberOfRowsAffected;
+            catch (Exception)
+            {
+                throw;
+            }
         }
-        public UserAccount getAccountByEmailAddress(string emailAddress)
+        public UserAccount GetAccountByEmailAddress(string emailAddress)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            UserAccount account = new UserAccount();
-            using (conn)
+            UserAccount userAccount = new UserAccount();
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@emailAddress", emailAddress));
+            var dataTable = _databaseCommand.GetDataWithConditions(SelectAccountUsingEmailAddress, parameters);
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("SELECT UserAccountID, EmailAddress, HashedPassword, UserAccountStatus, RoleID FROM UserAccount WHERE EmailAddress=@emailAddress", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@emailAddress", emailAddress);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        account.UserAccountID = (int)reader["UserAccountID"];
-                        account.EmailAddress = reader["EmailAddress"].ToString();
-                        account.HashedPassword = (byte[])reader["HashedPassword"];
-                        account.UserAccountStatus = reader["UserAccountStatus"].ToString();
-                        account.RoleID = Convert.ToInt32(reader["RoleID"]);
-                    }
-                }
+                userAccount.UserAccountID = Convert.ToInt32(row["UserAccountID"]);
+                userAccount.EmailAddress = row["EmailAddress"].ToString();
+                userAccount.HashedPassword = (byte[])row["HashedPassword"];
+                userAccount.UserAccountStatus = row["UserAccountStatus"].ToString();
+                userAccount.RoleID = Convert.ToInt32(row["RoleID"]);
             }
-            _dal.CloseConnection();
-            return account;
+            return userAccount;
         }
         public bool IsValidUser(string emailAddress, byte[] hashedPassword)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            bool isValid = false;
-            using (conn)
-            {
-                SqlCommand command = new SqlCommand("SELECT EmailAddress FROM UserAccount WHERE EmailAddress=@emailAddress AND HashedPassword = @hashedPassword", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.Add(new SqlParameter("@emailAddress", emailAddress));
-                command.Parameters.Add(new SqlParameter("@hashedPassword", hashedPassword));
-                SqlDataReader reader = command.ExecuteReader();
-                isValid = reader.HasRows;
-            }
-            _dal.CloseConnection();
-            return isValid;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@emailAddress", emailAddress));
+            parameters.Add(new SqlParameter("@hashedPassword", hashedPassword));
+            var dataTable = _databaseCommand.GetDataWithConditions(AuthenticateUserAccount, parameters);
+            return (dataTable.Rows.Count > 0);
         }
     }
 }

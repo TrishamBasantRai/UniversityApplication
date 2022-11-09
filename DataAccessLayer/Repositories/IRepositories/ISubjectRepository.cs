@@ -9,7 +9,7 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface ISubjectRepository
     {
-        List<string> getSubjectList();
-        int GetSubjectID(string subjectName);
+        List<string> GetListOfSubjects();
+        int GetSubjectIDBySubjectName(string subjectName);
     }
 }

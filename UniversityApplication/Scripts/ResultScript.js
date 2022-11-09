@@ -1,104 +1,133 @@
-﻿var numberOfSubjects = 1;
+﻿var numberOfSubjectsOnScreen = 3;
 
-window.onload = Details();
+function Details() {
+    var numberOfSubjects = 1;
+    let body = document.getElementById('tableBody');
 
-function buildErrorMessage(select, data) {
-    var option = document.createElement('OPTION');
-    option.setAttribute('value', data);
-    option.innerHTML = data;
-    select.appendChild(option);
+    while (numberOfSubjects < 4) {
+        body.innerHTML += `
+            <tr id="row${numberOfSubjects}">
+                <td>Subject ${numberOfSubjects}</td>
+                <td id="subjectCol${numberOfSubjects}"></td>
+                <td id="gradeCol${numberOfSubjects}"></td>
+            </tr>`
+        numberOfSubjects++;
+    }
 
-    return select;
-}
-
-
-function Details(/*e*/) {
-    //e.preventDefault();
     var serverCall = new ServerCall({
-        url: "/Subject/Index",
+        url: "/Subject/GetListOfSubjects",
         params: JSON.stringify(), callType: "POST"
     })
+
     serverCall.xhrCall().then((result) => {
         if (result.data.length > 0) {
-            var selectOne = document.createElement('SELECT');
-            var selectTwo = document.createElement('SELECT');
-            var selectThree = document.createElement('SELECT');
-            selectOne.setAttribute('id', 'subOne');
-            selectTwo.setAttribute('id', 'subTwo');
-            selectThree.setAttribute('id', 'subThree');
-            const subjectOne = document.getElementById("subjectOne");
-            const subjectTwo = document.getElementById("subjectTwo");
-            const subjectThree = document.getElementById("subjectThree");
-            //errorPane.innerHTML = "";
+            numberOfSubjects = 1;
 
-            for (var i = 0; i < result.data.length; i++) {
-                buildErrorMessage(selectOne, result.data[i]);
-                buildErrorMessage(selectTwo, result.data[i]);
-                buildErrorMessage(selectThree, result.data[i]);
+            while (numberOfSubjects < 4) {
+                var subjectVariable = document.getElementById(`subjectCol${numberOfSubjects}`);
+                var html = `<select id="subject${numberOfSubjects}">`
+
+                for (let subject of result.data) {
+                    html += `<option value="${subject}">${subject}</option>`
+                }
+
+                html += `</select>`
+                subjectVariable.innerHTML = html;
+                numberOfSubjects++;
             }
-
-            subjectOne.appendChild(selectOne);
-            subjectTwo.appendChild(selectTwo);
-            subjectThree.appendChild(selectThree);
         }
         else {
-            alert("1");
-            //window.location = result.url;
+            alert("Error!");
         }
     });
 
     var serverCall = new ServerCall({
-        url: "/Grade/Index",
+        url: "/Grade/GetListOfGrades",
         params: JSON.stringify(), callType: "POST"
-    })
-    serverCall.xhrCall().then((result) => {
-        if (result.data.length > 0) {
-            var selectOne = document.createElement('SELECT');
-            var selectTwo = document.createElement('SELECT');
-            var selectThree = document.createElement('SELECT');
-            selectOne.setAttribute('id', 'gOne');
-            selectTwo.setAttribute('id', 'gTwo');
-            selectThree.setAttribute('id', 'gThree');
-            const gradeOne = document.getElementById("gradeOne");
-            const gradeTwo = document.getElementById("gradeTwo");
-            const gradeThree = document.getElementById("gradeThree");
-            //errorPane.innerHTML = "";
-
-            for (var i = 0; i < result.data.length; i++) {
-                buildErrorMessage(selectOne, result.data[i].Grade);
-                buildErrorMessage(selectTwo, result.data[i].Grade);
-                buildErrorMessage(selectThree, result.data[i].Grade);
-            }
-
-            //errorPane.appendChild(select);
-            gradeOne.appendChild(selectOne);
-            gradeTwo.appendChild(selectTwo);
-            gradeThree.appendChild(selectThree);
-        }
-        else {
-            //window.location = result.url;
-        }
     });
 
+    serverCall.xhrCall().then((result) => {
+        if (result.data.length > 0) {
+            numberOfSubjects = 1;
+
+            while (numberOfSubjects < 4) {
+                var gradeVariable = document.getElementById(`gradeCol${numberOfSubjects}`);
+                var html = `<select id="grade${numberOfSubjects}">`
+
+                for (let grade of result.data) {
+                    html += `<option value="${grade.Grade}">${grade.Grade}</option>`
+                }
+
+                html += `</select>`
+                gradeVariable.innerHTML = html;
+                numberOfSubjects++;
+            }
+        }
+        else {
+            alert("Error!");
+        }
+    });
 }
 
 
 function Results(e) {
     e.preventDefault();
-    var SubjectNamesVar = [this.subOne.options[subOne.selectedIndex].value, this.subTwo.options[subTwo.selectedIndex].value, this.subThree.options[subThree.selectedIndex].value];
-    var SubjectGradesVar = [this.gOne.options[gOne.selectedIndex].value, this.gTwo.options[gTwo.selectedIndex].value, this.gThree.options[gThree.selectedIndex].value];
+
+    var SubjectNamesValue = [];
+    var SubjectGradesValue = [];
+
+    for (var i = 1; i <= numberOfSubjectsOnScreen; i++) {
+        var subjectNameEl = document.getElementById(`subject${i}`);
+        var subjectGradeEl = document.getElementById(`grade${i}`);
+
+        SubjectNamesValue.push(subjectNameEl.value);
+        SubjectGradesValue.push(subjectGradeEl.value);
+    }
+
     var ResultModel = {
-        SubjectNames: SubjectNamesVar,
-        Grades: SubjectGradesVar
+        SubjectNames: SubjectNamesValue,
+        Grades: SubjectGradesValue
     }
     var serverCall = new ServerCall({
-        url: "/Result/Index",
+        url: "/Result/InputResults",
         params: JSON.stringify(ResultModel), callType: "POST"
     })
     serverCall.xhrCall().then((result) => {
-        if (result) {
+        if (result.operationsCompleted) {
             window.location = result.url;
+        }
+        else {
+            let errorPane = document.getElementById('errorPane');
+            var html = `<ul>`;
+            for (let errors of result.data) {
+                html += `<li>${errors.ErrorMessage}</li>`
+            }
+            html += `</ul>`;
+            errorPane.innerHTML = html;
         }
     });
 
+}
+
+function Remove() {
+    if (numberOfSubjectsOnScreen == 1) {
+        alert("Minimum number of subjects reached!");
+    }
+    else {
+        var subjectTobeRemoved = document.getElementById(`row${numberOfSubjectsOnScreen}`);
+        subjectTobeRemoved.style.display = 'none';
+        numberOfSubjectsOnScreen--;
+    }
+
+}
+
+function Add() {
+    if (numberOfSubjectsOnScreen == 3) {
+        alert("Maximum number of subjects reached!");
+    }
+    else {
+        numberOfSubjectsOnScreen++;
+        var subjectToBeAdded = document.getElementById(`row${numberOfSubjectsOnScreen}`);
+        subjectToBeAdded.style.display = '';
+    }
 }

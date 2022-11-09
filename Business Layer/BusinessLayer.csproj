@@ -46,20 +46,36 @@
     <Compile Include="Functions\ICalculateScore.cs" />
     <Compile Include="Functions\IValidateLogin.cs" />
     <Compile Include="Functions\IValidateRegister.cs" />
+    <Compile Include="Functions\IValidateResults.cs" />
     <Compile Include="Functions\IValidateStudent.cs" />
     <Compile Include="Functions\ValidateLogin.cs" />
     <Compile Include="Functions\ValidateRegister.cs" />
+    <Compile Include="Functions\ValidateResults.cs" />
     <Compile Include="Functions\ValidateStudent.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Security\PasswordHashing.cs" />
+    <Compile Include="Services\AccountService.cs" />
+    <Compile Include="Services\AdminService.cs" />
+    <Compile Include="Services\ApplicationService.cs" />
+    <Compile Include="Services\GradeService.cs" />
+    <Compile Include="Services\IAccountService.cs" />
+    <Compile Include="Services\IAdminService.cs" />
+    <Compile Include="Services\IApplicationService.cs" />
+    <Compile Include="Services\IGradeService.cs" />
     <Compile Include="Services\ILoginService.cs" />
+    <Compile Include="Services\IRedirectService.cs" />
     <Compile Include="Services\IRegisterService.cs" />
     <Compile Include="Services\IResultService.cs" />
+    <Compile Include="Services\IRoleService.cs" />
     <Compile Include="Services\IStudentService.cs" />
+    <Compile Include="Services\ISubjectService.cs" />
     <Compile Include="Services\LoginService.cs" />
+    <Compile Include="Services\RedirectService.cs" />
     <Compile Include="Services\RegisterService.cs" />
     <Compile Include="Services\ResultService.cs" />
+    <Compile Include="Services\RoleService.cs" />
     <Compile Include="Services\StudentService.cs" />
+    <Compile Include="Services\SubjectService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataAccessLayer\DataAccessLayer.csproj">

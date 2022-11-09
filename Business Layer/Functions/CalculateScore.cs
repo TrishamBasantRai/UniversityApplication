@@ -22,7 +22,7 @@ namespace Business_Layer.Functions
         public int CalculateTotalScore(ResultModel resultModel)
         {
             //GradeRepository gradeRepository = new GradeRepository();
-            List<GradeDetails> gradeDetailsList = _gradeRepository.GetGradeDetails();
+            List<GradeDetails> gradeDetailsList = _gradeRepository.GetListOfGradeDetails();
             Dictionary<char, byte> gradeAssociation = new Dictionary<char, byte>();
             for (int i = 0; i < gradeDetailsList.Count; i++)
                 gradeAssociation.Add(gradeDetailsList[i].Grade, gradeDetailsList[i].GradePoints);

@@ -26,7 +26,7 @@ namespace BusinesLayer.Functions
         public List<ValidationResult> RegistrationValidation(string emailAddress, string password, string confirmPassword)
         {
             List<ValidationResult> results = new List<ValidationResult>();
-            UserAccount accountToBeCrossedCheckedWith = _accountRepository.getAccountByEmailAddress(emailAddress);
+            UserAccount accountToBeCrossedCheckedWith = _accountRepository.GetAccountByEmailAddress(emailAddress);
             Regex EmailRegex = new Regex("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
             if (string.IsNullOrEmpty(emailAddress))
                 results.Add(new ValidationResult("Please enter an email address."));
@@ -40,14 +40,10 @@ namespace BusinesLayer.Functions
                 results.Add(new ValidationResult("Invalid Email Address!"));
             else
             {
-                //ValidateDuplicateEmail - Database
                 if (accountToBeCrossedCheckedWith.EmailAddress == emailAddress)
                     results.Add(new ValidationResult("Email Address already exists."));
             }
             return results;
-            //return ValidationList(results, emailAddress, password, confirmPassword);
         }
     }
-}   
-
-//Password should not have any blank spaces, should have at least 1 symbol, 1 number, 1 uppercase and should be at least 8 characters long
+}  

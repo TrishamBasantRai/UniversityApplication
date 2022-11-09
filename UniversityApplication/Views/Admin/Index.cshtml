@@ -1,27 +1,31 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Index</h2>
-
-<body>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>National Identity Number</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Number of Points</th>
-                <th>Application of Status</th>
-            </tr>
-        </thead>
-        <tbody id="tableBody">
-        </tbody>
-    </table>
-    <script src="~/Scripts/ServerCall.js"></script>
-    <script src="~/Scripts/AdminScript.js"></script>
-    <script>
-        fetchStudentInfo();
-    </script>
-</body>
+﻿<html>
+    <head>
+        <title>University Application - Summary</title>
+        <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
+        <link rel="stylesheet" href="~/CSS/AdminStyleSheet.css"/>
+    </head>
+    <body>
+        <center><h2>Student Summary</h2></center>
+        <center>
+            <table border="1" class="tableContainer">
+                <thead>
+                    <tr>
+                        <th>National Identity Number</th>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Number of Points</th>
+                        <th>Application of Status</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody">
+                </tbody>
+            </table>
+        </center>
+        <center><button type="button" onclick="location.href='/Logout/Index';" class="logoutButton">Log out</button></center>
+        <script src="~/Scripts/ServerCall.js"></script>
+        <script src="~/Scripts/AdminScript.js"></script>
+        <script>
+            fetchStudentInfo();
+        </script>
+    </body>
+</html>

@@ -10,8 +10,8 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IAccountRepository
     {
-        int Insert(UserAccount account);
-        UserAccount getAccountByEmailAddress(string emailAddress);
+        bool InsertedNewAccount(UserAccount account);
+        UserAccount GetAccountByEmailAddress(string emailAddress);
         bool IsValidUser(string emailAddress, byte[] hashedPassword);
     }
 }

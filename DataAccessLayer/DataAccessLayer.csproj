@@ -44,7 +44,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Common\DAL.cs" />
+    <Compile Include="Common\DatabaseCommand.cs" />
     <Compile Include="Common\IDAL.cs" />
+    <Compile Include="Common\IDatabaseCommand.cs" />
     <Compile Include="Models\GradeDetails.cs" />
     <Compile Include="Models\Student.cs" />
     <Compile Include="Models\StudentApplication.cs" />
@@ -53,6 +55,7 @@
     <Compile Include="Models\UserAccount.cs" />
     <Compile Include="Models\UserRole.cs" />
     <Compile Include="Models\ViewModels\ApplicationModel.cs" />
+    <Compile Include="Models\ViewModels\ApplicationStatusModel.cs" />
     <Compile Include="Models\ViewModels\ResultModel.cs" />
     <Compile Include="Models\ViewModels\StudentModel.cs" />
     <Compile Include="Models\ViewModels\StudentSummaryModel.cs" />

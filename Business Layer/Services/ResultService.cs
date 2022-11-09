@@ -4,6 +4,7 @@ using DataAccessLayer.Repositories.ActualRepositories;
 using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,39 +17,43 @@ namespace Business_Layer.Services
         private readonly IApplicationRepository _applicationRepository;
         private readonly IStudentRepository _studentRepository;
         private readonly ICalculateScore _calculateScore;
-        public ResultService(IResultRepository resultRepository, IApplicationRepository applicationRepository, IStudentRepository studentRepository, ICalculateScore newScore)
+        private readonly IValidateResults _validateResults;
+        public ResultService(IResultRepository resultRepository, IApplicationRepository applicationRepository, IStudentRepository studentRepository, ICalculateScore newScore, IValidateResults validateResults)
         {
             _resultRepository = resultRepository;
             _applicationRepository = applicationRepository;
             _studentRepository = studentRepository;
             _calculateScore = newScore;
+            _validateResults = validateResults;
         }
-        public bool InputResult(ResultModel resultModel)
+        public List<ValidationResult> ValidatingResults(ResultModel resultModel)
         {
-            //ResultRepository resultRepository = new ResultRepository();
-            bool result = _resultRepository.Insert(resultModel);
-            //ApplicationRepository applicationRepository = new ApplicationRepository();
-            //StudentRepository studentRepository = new StudentRepository();
-            int currentStudentID = _studentRepository.GetStudentID();
-            //CalculateScore newScore = new CalculateScore();
+            return _validateResults.ResultsValidation(resultModel);
+        }
+        public bool InsertedResultsAndApplicationPlusUpdatedListOfApplicationStatus(ResultModel resultModel)
+        {
+            bool result = _resultRepository.InsertNewSetOfResults(resultModel);
+            int currentStudentID = _studentRepository.GetStudentIDOfCurrentSession();
             ApplicationModel applicationModel;
             int totalScore;
             string applicationStatus;
-            if (result)
+            if (!result)
+                return result;
+            totalScore = _calculateScore.CalculateTotalScore(resultModel);
+            if (totalScore < 10)
+                applicationStatus = "Rejected";
+            else
+                applicationStatus = "Pending";
+            applicationModel = new ApplicationModel()
             {
-                totalScore = _calculateScore.CalculateTotalScore(resultModel);
-                if (totalScore < 10)
-                    applicationStatus = "Rejected";
-                else
-                    applicationStatus = "Pending";
-                applicationModel = new ApplicationModel()
-                {
-                    ApplicationStatus = applicationStatus,
-                    StudentResultScore = totalScore,
-                    StudentID = currentStudentID
-                };
-                result = _applicationRepository.Insert(applicationModel);
-            }
+                ApplicationStatus = applicationStatus,
+                StudentResultScore = totalScore,
+                StudentID = currentStudentID
+            };
+            result = _applicationRepository.InsertNewApplication(applicationModel);
+            if (!result)
+                return result;
+            result = _applicationRepository.UpdateListOfApplicationStatus();
             return result;
         }
     }

@@ -22,8 +22,9 @@ namespace UniversityApplication.Controllers
         [HttpPost]
         public JsonResult RegisterNewAccount(string emailAddress, string password, string confirmPassword)
         {
-            List<ValidationResult> listOfErrors = _registering.RegisterAccount(emailAddress, password, confirmPassword, "Student");
-            return Json(new { data = listOfErrors, hasErrors = listOfErrors.Any(), url = Url.Action("Index", "Login") });
+            string defaultAccountRole = "Student";
+            List<ValidationResult> listOfErrorsOfInput = _registering.RegisterAccount(emailAddress, password, confirmPassword, defaultAccountRole);
+            return Json(new { data = listOfErrorsOfInput, hasErrors = listOfErrorsOfInput.Any(), url = Url.Action("Index", "Login") });
         }
     }
 }

@@ -1,40 +1,33 @@
-﻿
-@{
-    ViewBag.Title = "Index";
-}
-
-<h2>Student Details</h2>
-
-<head>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <script type="text/javascript" src="~/Scripts/StudentScript.js"></script>
-    <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
-    <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
-
-    <title>Register</title>
-</head>
-
-<div class="PageContainer">
-    <h2 class="PageTitle">Student Details</h2>
-    <span role="alert" id="errorPane" aria-hidden="true" style="color:red"></span>
-    <form method="POST" class="formContainer" id="form" onsubmit="Details(event)">
-        <label class="formLabel" for="NID">Your National Identity Number:</label>
-        <input class="formInput" type="text" id="NID" name="NID" />
-        <label class="formLabel" for="firstName">Your First Name:</label>
-        <input class="formInput" type="text" id="firstName" name="firstName" />
-        <label class="formLabel" for="lastName">Your Last Name:</label>
-        <input class="formInput" type="text" id="lastName" name="lastName" />
-        <label class="formLabel" for="address">Your Address:</label>
-        <input class="formInput" type="text" id="address" name="address" />
-        <label class="formLabel" for="phoneNumber">Your Phone Number:</label>
-        <input class="formInput" type="text" id="phoneNumber" name="phoneNumber" />
-        <label class="formLabel" for="dob">Your Date Of Birth:</label>
-        <input class="formInput" type="date" id="dob" name="dob" />
-        <label class="formLabel" for="guardianName">Your Guardian Name:</label>
-        <input class="formInput" type="text" id="guardianName" name="guardianName" />
-        <input class="submitInput" type="submit" value="Submit Details" id="buttonRegister" />
-    </form>
-    <a href="/Logout/Index">Log out</a>
-</div>
+﻿<html>
+    <head>
+        <script type="text/javascript" src="~/Scripts/StudentScript.js"></script>
+        <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
+        <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
+        <link rel="stylesheet" href="~/CSS/MainStyleSheet.css" />
+        <title>University Application - Details</title>
+    </head>
+    <body>
+        <div class="PageContainer">
+            <h2 class="PageTitle">Student Details</h2>
+            <form method="POST" class="formContainer" id="form" onsubmit="Details(event)">
+                <label class="formLabel" for="NID">Your National Identity Number:</label>
+                <input class="formInput" type="text" id="NID" name="NID" required maxlength="15"/>
+                <label class="formLabel" for="firstName">Your First Name:</label>
+                <input class="formInput" type="text" id="firstName" name="firstName" required maxlength="64"/>
+                <label class="formLabel" for="lastName">Your Last Name:</label>
+                <input class="formInput" type="text" id="lastName" name="lastName" required maxlength="64"/>
+                <label class="formLabel" for="address">Your Address:</label>
+                <input class="formInput" type="text" id="address" name="address" required/>
+                <label class="formLabel" for="phoneNumber">Your Phone Number:</label>
+                <input class="formInput" type="text" id="phoneNumber" name="phoneNumber" required/>
+                <label class="formLabel" for="dob">Your Date Of Birth:</label>
+                <input class="formInput" type="date" id="dob" name="dob" required/>
+                <label class="formLabel" for="guardianName">Your Guardian Name:</label>
+                <input class="formInput" type="text" id="guardianName" name="guardianName" maxlength="128"/>
+                <input class="submitInput" type="submit" value="Submit Details" id="buttonRegister" />
+            </form>
+            <span role="alert" id="errorPane" aria-hidden="true" style="color:red"></span>
+            <center><button type="button" onclick="location.href='/Logout/Index';" class="logoutButton">Log out</button></center>
+        </div>
+    </body>
+</html>

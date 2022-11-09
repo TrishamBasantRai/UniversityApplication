@@ -9,6 +9,6 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IGradeRepository
     {
-        List<GradeDetails> GetGradeDetails();
+        List<GradeDetails> GetListOfGradeDetails();
     }
 }

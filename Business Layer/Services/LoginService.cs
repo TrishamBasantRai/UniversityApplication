@@ -24,21 +24,12 @@ namespace BusinesLayer.Services
         }
         public List<ValidationResult> LoginResults(string emailAddress, string password)
         {
-            //ValidateLogin loginDataValidation = new ValidateLogin();
             List<ValidationResult> results = _loginDataValidation.ValidationLoginResults(emailAddress, password);
-            //AccountRepository accountRepository = new AccountRepository();
-            if (results.Count == 0)
-            {
-                if (!_accountRepository.IsValidUser(emailAddress, PasswordHashing.ComputeStringToSha256Hash(password)))
-                    results.Add(new ValidationResult("Unable to authenticate user!"));
-            }
+            if (results.Count > 0)
+                return results;
+            if (!_accountRepository.IsValidUser(emailAddress, PasswordHashing.ComputeStringToSha256Hash(password)))
+                results.Add(new ValidationResult("Unable to authenticate user!"));
             return results;
         }
     }
 }
-
-//Controller will call LoginService - passing email and password as parameters
-//Login Service will first validate the data (if it is of type email and password has not empty spaces)
-//If data is not valid, skip the insert part, return the list of errors
-//if data is valid, cross check the email address and the password with database
-//If it matches, authenticate, else, return error

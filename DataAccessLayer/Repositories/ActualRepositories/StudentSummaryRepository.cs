@@ -8,41 +8,38 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Common;
+using DataAccessLayer.Entities;
+using System.Net.Mail;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class StudentSummaryRepository : IStudentSummaryRepository
     {
-        private readonly IDAL _dal;
-        public StudentSummaryRepository(IDAL dal)
+        private readonly IDatabaseCommand _databaseCommand;
+        private const string GetStudentApplicationSummary = @"SELECT NationalIdentityNumber, FirstName, LastName, 
+                                                              StudentResultScore, StudentApplicationStatus 
+                                                              FROM StudentDetails 
+                                                              INNER JOIN StudentApplication 
+                                                              ON StudentDetails.StudentID = StudentApplication.StudentID";
+        public StudentSummaryRepository(IDatabaseCommand databaseCommand)
         {
-            _dal = dal;
+            _databaseCommand = databaseCommand;
         }
         public List<StudentSummaryModel> GetStudentSummary()
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
+            var dataTable = _databaseCommand.GetData(GetStudentApplicationSummary);
             List<StudentSummaryModel> studentSummaryList = new List<StudentSummaryModel>();
-            using (conn)
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("SELECT NationalIdentityNumber, FirstName, LastName, StudentResultScore, StudentApplicationStatus FROM StudentDetails INNER JOIN StudentApplication ON StudentDetails.StudentID = StudentApplication.StudentID", conn);
-                command.CommandType = CommandType.Text;
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                studentSummaryList.Add(new StudentSummaryModel()
                 {
-                    while (reader.Read())
-                    {
-                        studentSummaryList.Add(new StudentSummaryModel(){
-                            NationalIdentityNumber = reader["NationalIdentityNumber"].ToString(),
-                            FirstName = reader["FirstName"].ToString(),
-                            LastName = reader["LastName"].ToString(),
-                            TotalScore = Convert.ToInt32(reader["StudentResultScore"]),
-                            ApplicationStatus = reader["StudentApplicationStatus"].ToString()
-                        });
-                    }
-                }
+                    NationalIdentityNumber = row["NationalIdentityNumber"].ToString(),
+                    FirstName = row["FirstName"].ToString(),
+                    LastName = row["LastName"].ToString(),
+                    TotalScore = Convert.ToInt32(row["StudentResultScore"]),
+                    ApplicationStatus = row["StudentApplicationStatus"].ToString()
+                });
             }
-            _dal.CloseConnection();
             return studentSummaryList;
         }
     }

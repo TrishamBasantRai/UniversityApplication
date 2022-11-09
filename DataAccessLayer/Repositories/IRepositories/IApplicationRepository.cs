@@ -9,6 +9,8 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IApplicationRepository
     {
-        bool Insert(ApplicationModel applicationModel);
+        bool InsertNewApplication(ApplicationModel applicationModel);
+        ApplicationStatusModel GetApplicationStatusDetailsOfStudent();
+        bool UpdateListOfApplicationStatus();
     }
 }

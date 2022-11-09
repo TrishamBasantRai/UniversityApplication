@@ -50,12 +50,12 @@ namespace UniversityApplication
             // TODO: Register your type's mappings here.
             // container.RegisterType<IProductRepository, ProductRepository>();
             container.RegisterType<IDAL, DAL>();
+            container.RegisterType<IDatabaseCommand, DatabaseCommand>();
 
             container.RegisterType<ICalculateScore, CalculateScore>();
             container.RegisterType<IValidateLogin, ValidateLogin>();
             container.RegisterType<IValidateRegister, ValidateRegister>();
             container.RegisterType<IValidateStudent, ValidateStudent>();
-
 
             container.RegisterType<IAccountRepository, AccountRepository>();
             container.RegisterType<IRoleRepository, RoleRepository>();
@@ -69,11 +69,19 @@ namespace UniversityApplication
             container.RegisterType<IValidateLogin, ValidateLogin>();
             container.RegisterType<IValidateRegister, ValidateRegister>();
             container.RegisterType<IValidateStudent, ValidateStudent>();
+            container.RegisterType<IValidateResults, ValidateResults>();
 
             container.RegisterType<ILoginService, LoginService>();
             container.RegisterType<IRegisterService, RegisterService>();
             container.RegisterType<IResultService, ResultService>();
             container.RegisterType<IStudentService, StudentService>();
+            container.RegisterType<IRedirectService, RedirectService>();
+            container.RegisterType<IApplicationService, ApplicationService>();
+            container.RegisterType<IAccountService, AccountService>();
+            container.RegisterType<IRoleService, RoleService>();
+            container.RegisterType<ISubjectService, SubjectService>();
+            container.RegisterType<IAdminService, AdminService>();
+            container.RegisterType<IGradeService, GradeService>();
         }
     }
 }

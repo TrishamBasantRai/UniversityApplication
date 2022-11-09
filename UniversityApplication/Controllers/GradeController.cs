@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Entities;
+﻿using Business_Layer.Services;
+using DataAccessLayer.Entities;
 using DataAccessLayer.Repositories.ActualRepositories;
 using DataAccessLayer.Repositories.IRepositories;
 using System;
@@ -11,15 +12,15 @@ namespace UniversityApplication.Controllers
 {
     public class GradeController : Controller
     {
-        private readonly IGradeRepository _gradeRepository;
-        public GradeController(IGradeRepository gradeRepository)
+        private readonly IGradeService _gradeService;
+        public GradeController(IGradeService gradeService)
         {
-            _gradeRepository = gradeRepository;
+            _gradeService = gradeService;
         }
         [HttpPost]
         public JsonResult GetListOfGrades()
         {
-            List<GradeDetails> result = _gradeRepository.GetGradeDetails();
+            List<GradeDetails> result = _gradeService.GetGradeList();
             return Json(new { data = result });
         }
     }

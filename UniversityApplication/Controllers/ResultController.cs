@@ -3,6 +3,7 @@ using DataAccessLayer.Models.ViewModels;
 using DataAccessLayer.Repositories.ActualRepositories;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Security.Policy;
 using System.Web;
@@ -20,8 +21,11 @@ namespace UniversityApplication.Controllers
         [HttpPost]
         public JsonResult InputResults(ResultModel resultModel)
         {
-            bool result = _resultService.InputResult(resultModel);
-            return Json(new { data = result, url = Url.Action("StudentApplicationStatus", "Student") });
+            List<ValidationResult> listOfErrors = _resultService.ValidatingResults(resultModel);
+            bool operationsDoneOnResults = false;
+            if(!listOfErrors.Any())
+                operationsDoneOnResults = _resultService.InsertedResultsAndApplicationPlusUpdatedListOfApplicationStatus(resultModel);
+            return Json(new { data = listOfErrors, operationsCompleted = operationsDoneOnResults, url = Url.Action("StudentApplicationStatus", "Student") });
         }
     }
 }

@@ -1,13 +1,4 @@
-﻿function buildErrorMessage(ul, errorMessage) {
-    var li = document.createElement('LI');
-    li.innerHTML = errorMessage;
-    ul.appendChild(li);
-
-    return ul;
-}
-
-
-function Register(e) {
+﻿function Register(e) {
     e.preventDefault();
 
     var RegisterModel = {
@@ -23,15 +14,13 @@ function Register(e) {
     serverCall.xhrCall().then((result) => {
 
         if (result.hasErrors) {
-            var ul = document.createElement('UL');
-            const errorPane = document.getElementById("errorPane");
-            errorPane.innerHTML = ""; 
-
-            for (var i = 0; i < result.data.length; i++) {
-                buildErrorMessage(ul, result.data[i].ErrorMessage);
+            let errorPane = document.getElementById('errorPane');
+            var html = `<ul>`;
+            for (let errors of result.data) {
+                html += `<li>${errors.ErrorMessage}</li>`
             }
-
-            errorPane.appendChild(ul);
+            html += `</ul>`;
+            errorPane.innerHTML = html;
         }
         else {
             window.location = result.url;

@@ -1,0 +1,19 @@
+﻿.statusContainer {
+    display: flex;
+    flex-direction: column;
+    width: 45%;
+    justify-content: center;
+    align-items: center;
+    border-radius: 20px;
+    box-shadow: -10px -10px 15px rgba(70, 70, 70, 0.12), 10px 10px 15px rgba(70,70,70,0.12);
+    margin-bottom: 50px;
+    padding-top: 25px;
+    padding-bottom: 25px;
+    background: linear-gradient(to bottom right, rgba(59, 59, 146, 0.5), lightblue);
+}
+
+@media (max-width: 1400px) {
+    .statusContainer {
+        width: 75%;
+    }
+}

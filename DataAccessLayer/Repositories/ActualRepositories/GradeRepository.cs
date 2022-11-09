@@ -8,39 +8,30 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using DataAccessLayer.Common;
+using System.Diagnostics;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class GradeRepository : IGradeRepository
     {
-        private readonly IDAL _dal;
-        public GradeRepository(IDAL dal)
+        private readonly IDatabaseCommand _databaseCommand;
+        private const string GetGrades = @"SELECT Grade, GradePoints FROM GradeDetails";
+        public GradeRepository(IDatabaseCommand databaseCommand)
         {
-            _dal = dal;
+            _databaseCommand = databaseCommand;
         }
-        public List<GradeDetails> GetGradeDetails()
+        public List<GradeDetails> GetListOfGradeDetails()
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
             List<GradeDetails> gradeDetails = new List<GradeDetails>();
-            using (conn)
+            var dataTable = _databaseCommand.GetData(GetGrades);
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("SELECT Grade, GradePoints FROM GradeDetails", conn);
-                command.CommandType = CommandType.Text;
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
+                gradeDetails.Add(new GradeDetails()
                 {
-                    while (reader.Read())
-                    {
-                        gradeDetails.Add(new GradeDetails()
-                        {
-                            Grade = Convert.ToChar(reader["Grade"]),
-                            GradePoints = Convert.ToByte(reader["GradePoints"])
-                        });
-                    }
-                }
+                    Grade = Convert.ToChar(row["Grade"]),
+                    GradePoints = Convert.ToByte(row["GradePoints"])
+                });
             }
-            _dal.CloseConnection();
             return gradeDetails;
         }
     }

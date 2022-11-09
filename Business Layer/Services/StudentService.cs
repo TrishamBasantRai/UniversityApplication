@@ -24,11 +24,9 @@ namespace Business_Layer.Services
 
         public List<ValidationResult> StudentValidate(StudentModel studentModel)
         {
-            //ValidateStudent validateStudent = new ValidateStudent();
             List<ValidationResult> results = _validateStudent.StudentValidation(studentModel);
-            //StudentRepository studentRepository = new StudentRepository();
             if(results.Count == 0)
-                _studentRepository.Insert(studentModel);
+                _studentRepository.InsertNewStudentDetails(studentModel);
             return results;
         }
     }

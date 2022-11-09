@@ -12,10 +12,10 @@ namespace UniversityApplication.Controllers
 {
     public class AdminController : Controller
     {
-        private readonly IStudentSummaryRepository _studentSummaryRepository;
-        public AdminController(IStudentSummaryRepository studentSummaryRepository)
+        private readonly IAdminService _adminService;
+        public AdminController(IAdminService adminService)
         {
-            _studentSummaryRepository = studentSummaryRepository;
+            _adminService = adminService;
         }
         public ActionResult Index()
         {
@@ -26,7 +26,7 @@ namespace UniversityApplication.Controllers
         [HttpPost]
         public JsonResult GetSummaryOfStudentsApplied()
         {
-            List<StudentSummaryModel> result = _studentSummaryRepository.GetStudentSummary();
+            List<StudentSummaryModel> result = _adminService.GetSummaryOfStudents();
             return Json(new { data = result });
         }
     }

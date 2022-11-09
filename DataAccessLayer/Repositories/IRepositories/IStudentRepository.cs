@@ -10,9 +10,9 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IStudentRepository
     {
-        int Insert(StudentModel student);
-        int GetStudentID();
-        bool NationalIdentityNumberExists(string nationalIdentityNumber);
-        bool PhoneNumberExists(string phoneNumber);
+        bool InsertNewStudentDetails(StudentModel student);
+        int GetStudentIDOfCurrentSession();
+        bool NationalIdentityNumberAlreadyExists(string nationalIdentityNumber);
+        bool PhoneNumberAlreadyExists(string phoneNumber);
     }
 }

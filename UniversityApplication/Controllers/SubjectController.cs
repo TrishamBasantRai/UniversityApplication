@@ -1,4 +1,5 @@
-﻿using DataAccessLayer.Repositories.ActualRepositories;
+﻿using Business_Layer.Services;
+using DataAccessLayer.Repositories.ActualRepositories;
 using DataAccessLayer.Repositories.IRepositories;
 using System;
 using System.Collections.Generic;
@@ -10,15 +11,15 @@ namespace UniversityApplication.Controllers
 {
     public class SubjectController : Controller
     {
-        private readonly ISubjectRepository _subjectRepository;
-        public SubjectController(ISubjectRepository subjectRepository)
+        private readonly ISubjectService _subjectService;
+        public SubjectController(ISubjectService subjectService)
         {
-            _subjectRepository = subjectRepository;
+            _subjectService = subjectService;
         }
         [HttpPost]
         public JsonResult GetListOfSubjects()
         {
-            List<string> result = _subjectRepository.getSubjectList();
+            List<string> result = _subjectService.GetSubjectList();
             return Json(new { data = result });
         }
     }

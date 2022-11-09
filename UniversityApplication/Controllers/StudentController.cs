@@ -15,37 +15,34 @@ namespace UniversityApplication.Controllers
 {
     public class StudentController : Controller
     {
-        private readonly IStudentRepository _studentRepository;
         private readonly IStudentService _studentService;
-        private readonly IResultRepository _resultRepository;
-        public StudentController(IStudentRepository studentRepository, IStudentService studentService, IResultRepository resultRepository)
+        private readonly IRedirectService _redirectService;
+        private readonly IApplicationService _applicationService;
+        public StudentController(IStudentService studentService, IRedirectService redirectService, IApplicationService applicationService)
         {
-            _studentRepository = studentRepository;
             _studentService = studentService;
-            _resultRepository = resultRepository;
+            _redirectService = redirectService;
+            _applicationService = applicationService;
         }
         public ActionResult Index()
         {
             if (Session["emailAddress"] == null)
                 return RedirectToAction("Index", "Login");
-            int studentID = _studentRepository.GetStudentID();
-            int invalidStudentID = -1;
-            if (studentID != invalidStudentID)
+            if(_redirectService.HasAlreadyInputDetails())
                 return RedirectToAction("InputResults", "Student");
             return View();
         }
         [HttpPost]
         public JsonResult InputDetails(StudentModel studentModel)
         {
-            List<ValidationResult> listOfErrors = _studentService.StudentValidate(studentModel);
-            return Json(new { data = listOfErrors, hasErrors = listOfErrors.Any(), url = Url.Action("InputResults", "Student") });
+            List<ValidationResult> listOfErrorsOfInput = _studentService.StudentValidate(studentModel);
+            return Json(new { data = listOfErrorsOfInput, hasErrors = listOfErrorsOfInput.Any(), url = Url.Action("InputResults", "Student") });
         }
         public ActionResult InputResults()
         {
             if (Session["emailAddress"] == null)
                 return RedirectToAction("Index", "Login");
-            int studentID = _studentRepository.GetStudentID();
-            if (_resultRepository.ResultExists(studentID))
+            if(_redirectService.HasAlreadyInputResults())
                 return RedirectToAction("StudentApplicationStatus", "Student");
             return View();
         }
@@ -54,6 +51,13 @@ namespace UniversityApplication.Controllers
             if (Session["emailAddress"] == null)
                 return RedirectToAction("Index", "Login");
             return View();
+        }
+
+        [HttpPost]
+        public JsonResult GetStatusDetails()
+        {
+            ApplicationStatusModel studentStatusDetails = _applicationService.GetApplicationStatusDetails();
+            return Json(new { data = studentStatusDetails });
         }
     }
 }

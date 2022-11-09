@@ -19,7 +19,6 @@ namespace BusinesLayer.Services
     {
         private readonly IAccountRepository _accountRepository;
         private readonly IRoleRepository _roleRepository;
-        //private readonly
         private readonly IValidateRegister _validateRegister;
 
         public RegisterService(IAccountRepository accountRepository, IRoleRepository roleRepository, IValidateRegister validateRegister)
@@ -31,9 +30,7 @@ namespace BusinesLayer.Services
 
         public List<ValidationResult> RegisterAccount(string emailAddress, string password, string confirmPassword, string roleName)
         {
-            //ValidateRegister ValidateInputData = new ValidateRegister(_accountRepository);
             List<ValidationResult> result = _validateRegister.RegistrationValidation(emailAddress, password, confirmPassword);
-            //RoleRepository getRoleID = new RoleRepository();
             UserAccount newAccount = new UserAccount();
             string defaultAccountStatus = "Active";
             if (result.Count == 0)
@@ -42,7 +39,7 @@ namespace BusinesLayer.Services
                 newAccount.HashedPassword = PasswordHashing.ComputeStringToSha256Hash(password);
                 newAccount.RoleID = _roleRepository.GetRoleIDByRoleName(roleName);
                 newAccount.UserAccountStatus = defaultAccountStatus;
-                _accountRepository.Insert(newAccount);
+                _accountRepository.InsertedNewAccount(newAccount);
             }
             return result;
         }

@@ -10,60 +10,63 @@ using System.Threading.Tasks;
 using System.Web;
 using DataAccessLayer.Common;
 using DataAccessLayer.Entities;
+using System.Net.Mail;
+using System.Security.Principal;
+using System.Collections;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class ResultRepository : IResultRepository
     {
         private readonly IDAL _dal;
+        private readonly IDatabaseCommand _databaseCommand;
         private readonly IStudentRepository _studentRepository;
         private readonly ISubjectRepository _subjectRepository;
-        public ResultRepository(IDAL dal, IStudentRepository studentRepository, ISubjectRepository subjectRepository)
+        private const string GetFirstRowByStudentID = @"SELECT TOP 1 StudentID FROM StudentResult WHERE StudentID=@StudentID";
+        private const string InsertIntoResult = @"INSERT INTO StudentResult(SubjectID, Grade, StudentID) VALUES(@SubjectID, @Grade, @StudentID)";
+        public ResultRepository(IDAL dal, IStudentRepository studentRepository, ISubjectRepository subjectRepository, IDatabaseCommand databaseCommand)
         {
             _dal = dal;
             _studentRepository = studentRepository;
             _subjectRepository = subjectRepository;
+            _databaseCommand = databaseCommand;
         }
-        public bool Insert(ResultModel resultModel)
+        public bool InsertNewSetOfResults(ResultModel resultModel)
         {
-            //StudentRepository studentRepository = new StudentRepository();
-            int StudentID = _studentRepository.GetStudentID();
-            //SubjectRepository subjectRepository = new SubjectRepository();
-            int numberOfRowsAffected;
             _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            using (conn)
+            SqlTransaction transaction = _dal.Connection.BeginTransaction();
+            try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO StudentResult(SubjectID, Grade, StudentID) VALUES(@SubjectID, @Grade, @StudentID)", conn);
-                command.CommandType = CommandType.Text;
-
-                for (int i = 0; i < resultModel.SubjectNames.Count; i++)
+                int studentID = _studentRepository.GetStudentIDOfCurrentSession();
+                using (SqlCommand command = new SqlCommand(InsertIntoResult, _dal.Connection, transaction))
                 {
-                    command.Parameters.AddWithValue("@SubjectID", _subjectRepository.GetSubjectID(resultModel.SubjectNames[i]));
-                    command.Parameters.AddWithValue("@Grade", resultModel.Grades[i]);
-                    command.Parameters.AddWithValue("@StudentID", StudentID);
-                    numberOfRowsAffected = command.ExecuteNonQuery();
-                    command.Parameters.Clear();
+                    command.CommandType = CommandType.Text;
+                    for (int i = 0; i < resultModel.SubjectNames.Count; i++)
+                    {
+                        command.Parameters.AddWithValue("@SubjectID", _subjectRepository.GetSubjectIDBySubjectName(resultModel.SubjectNames[i]));
+                        command.Parameters.AddWithValue("@Grade", resultModel.Grades[i]);
+                        command.Parameters.AddWithValue("@StudentID", studentID);
+                        command.ExecuteNonQuery();
+                        command.Parameters.Clear();
+                    }
                 }
+                transaction.Commit();
+                _dal.CloseConnection();
+                return true;
             }
-            _dal.CloseConnection();
-            return true;
-        }
-        public bool ResultExists(int studentID)
-        {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            using (conn)
+            catch (Exception)
             {
-                SqlCommand command = new SqlCommand("SELECT TOP 1 StudentID FROM StudentResult WHERE StudentID=@StudentID", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@StudentID", studentID);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                    return true;
+                transaction.Rollback();
+                throw;
             }
-            _dal.CloseConnection();
-            return false;
+
+        }
+        public bool ResultAlreadyBeenInput(int studentID)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@StudentID", studentID));
+            var dataTable = _databaseCommand.GetDataWithConditions(GetFirstRowByStudentID, parameters);
+            return (dataTable.Rows.Count > 0);
         }
     }
 }

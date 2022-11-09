@@ -1,27 +1,24 @@
-﻿@{ Layout = null; }
-
-<head>
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    <script type="text/javascript" src="~/Scripts/LoginScript.js"></script>
-    <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
-    <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
-
-    <title>University Application - Login</title>
-</head>
-
-<div class="PageContainer">
-    <h2 class="PageTitle">Login</h2>
-    <form method="POST" class="formContainer" id="form" onsubmit="SignIn(event)">
-        <label class="formLabel" for="EmailAddress">Your Email Address:</label>
-        <input class="formInput" type="email" id="emailAddress" name="emailAddress" placeholder="Your email goes here" />
-        <label class="formLabel" for="password">Your Password:</label>
-        <input class="formInput" type="password" id="password" name="password" />
-        <input class="submitInput" type="submit" value="Log in" id="buttonLogin" />
-    </form>
-    <span role="alert" id="errorPane" aria-hidden="true" style="color:red"></span>
-    <p>You don't have an account yet?</p>
-    <a href="/Register/Index">Register Now</a>
-</div>
+﻿<html>
+    <head>
+        <script type="text/javascript" src="~/Scripts/LoginScript.js"></script>
+        <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
+        <link rel="stylesheet" href="~/CSS/MainStyleSheet.css" />
+        <title>University Application - Login</title>
+    </head>
+    <body>
+        <div class="PageContainer">
+            <h2 class="PageTitle">Login</h2>
+            <span role="alert" id="errorPane" aria-hidden="true" style="color:red"></span>
+            <form method="POST" class="formContainer" id="form" onsubmit="SignIn(event)">
+                <label class="formLabel" for="EmailAddress">Your Email Address:</label>
+                <input class="formInput" type="email" id="emailAddress" name="emailAddress" placeholder="Your email goes here" required maxlength="100"/>
+                <label class="formLabel" for="password">Your Password:</label>
+                <input class="formInput" type="password" id="password" name="password" required/>
+                <input class="submitInput" type="submit" value="Log in" id="buttonLogin" />
+            </form>
+            <h4>You don't have an account yet?</h4>
+            <a href="/Register/Index">Register Now</a>
+        </div>
+    </body>
+</html>
 

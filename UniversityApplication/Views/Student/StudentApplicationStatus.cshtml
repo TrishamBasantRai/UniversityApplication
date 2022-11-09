@@ -1,8 +1,24 @@
-﻿
-@{
-    ViewBag.Title = "Status";
-}
-
-<h2>Status</h2>
-<p>HI!</p>
-<a href="/Logout/Index">Log out</a>
+﻿<html>
+    <head>
+        <script type="text/javascript" src="~/Scripts/StatusScript.js"></script>
+        <script type="text/javascript" src="~/Scripts/ServerCall.js"></script>
+        <link rel="stylesheet" href="~/CSS/StatusStylesheet.css" />
+        <link rel="stylesheet" href="~/CSS/LogoutButtonStyleSheet.css" />
+        <link rel="stylesheet" href="~/CSS/StyleSheet.css" />
+        <title>University Application - Status</title>
+    </head>
+    <body>
+        <div class="PageContainer">
+            <h2 class="PageTitle">Application Status</h2>
+            <div class="statusContainer">
+                <h2 id="name">Name: </h2>
+                <h2 id="score">Total Points: </h2>
+                <h2 id="status">Status of Application: </h2>
+            </div>
+        </div>
+        <script>
+            fetchStudentStatus();
+        </script>
+        <center><button type="button" onclick="location.href='/Logout/Index';" class="logoutButton">Log out</button></center>
+    </body>
+</html>

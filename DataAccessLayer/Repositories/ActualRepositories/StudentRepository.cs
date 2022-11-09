@@ -13,97 +13,78 @@ using DataAccessLayer.Models.ViewModels;
 using System.Web;
 using System.Web.Security;
 using System.Net.Mail;
+using System.Security.Principal;
 
 namespace DataAccessLayer.Repositories.ActualRepositories
 {
     public class StudentRepository : IStudentRepository
     {
-        private readonly IDAL _dal;
-        public StudentRepository(IDAL dal)
+        private readonly IDatabaseCommand _databaseCommand;
+        private const string GetCurrentUserStudentID = @"Select StudentID FROM StudentDetails 
+                                                         WHERE UserAccountID = @UserAccountID";
+        private const string InsertNewStudent = @"INSERT INTO StudentDetails(NationalIdentityNumber, FirstName, 
+                                                  LastName, Address, PhoneNumber, DateOfBirth, GuardianName, UserAccountID) 
+                                                  VALUES(@NationalIdentityNumber, @FirstName, 
+                                                  @LastName, @Address, @PhoneNumber, @DateOfBirth, @GuardianName, @UserAccountID)";
+        private const string CheckIfNationalIdentityNumberAlreadyExists = @"SELECT StudentID FROM StudentDetails 
+                                                                            WHERE NationalIdentityNumber=@NationalIdentityNumber";
+        private const string CheckIfPhoneNumberAlreadyExists = @"SELECT StudentID FROM StudentDetails WHERE PhoneNumber=@PhoneNumber";
+        public StudentRepository(IDatabaseCommand databaseCommand)
         {
-            _dal = dal;
+            _databaseCommand = databaseCommand;
         }
 
-        public int GetStudentID()
+        public int GetStudentIDOfCurrentSession()
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            int invalidStudentID = -1;
-            int StudentID = invalidStudentID;
-            using (conn)
+            int studentIDDoesNotExist = -1;
+            int studentID = studentIDDoesNotExist;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@UserAccountID", HttpContext.Current.Session["UserAccountID"]));
+            var dataTable = _databaseCommand.GetDataWithConditions(GetCurrentUserStudentID, parameters);
+            foreach (DataRow row in dataTable.Rows)
             {
-                SqlCommand command = new SqlCommand("Select StudentID FROM StudentDetails WHERE UserAccountID = @UserAccountID", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.AddWithValue("@UserAccountID", HttpContext.Current.Session["UserAccountID"]);
-                SqlDataReader reader = command.ExecuteReader();
-                if (reader.HasRows)
-                {
-                    while (reader.Read())
-                    {
-                        StudentID = Convert.ToInt32(reader["StudentID"]);
-                    }
-                }
+                studentID = Convert.ToInt32(row["StudentID"]);
             }
-            _dal.CloseConnection();
-            return StudentID;
+            return studentID;
         }
 
-        public int Insert(StudentModel studentModel)
+        public bool InsertNewStudentDetails(StudentModel studentModel)
         {
-            int numberOfRowsAffected;
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            using (conn)
+            try
             {
-                SqlCommand command = new SqlCommand("INSERT INTO StudentDetails(NationalIdentityNumber, FirstName, LastName, Address, PhoneNumber, DateOfBirth, GuardianName, UserAccountID) VALUES(@NationalIdentityNumber, @FirstName, @LastName, @Address, @PhoneNumber, @DateOfBirth, @GuardianName, @UserAccountID)", conn);
-                command.CommandType = CommandType.Text;
-
-                command.Parameters.AddWithValue("@NationalIdentityNumber", studentModel.NationalIdentityNumber);
-                command.Parameters.AddWithValue("@FirstName", studentModel.FirstName);
-                command.Parameters.AddWithValue("@LastName", studentModel.LastName);
-                command.Parameters.AddWithValue("@Address", studentModel.Address);
-                command.Parameters.AddWithValue("@PhoneNumber", studentModel.PhoneNumber);
-                command.Parameters.AddWithValue("@DateOfBirth", studentModel.DateOfBirth);
-                command.Parameters.AddWithValue("@GuardianName", studentModel.GuardianName);
-                command.Parameters.AddWithValue("@UserAccountID", HttpContext.Current.Session["userAccountID"].ToString());
-                numberOfRowsAffected = command.ExecuteNonQuery();
+                List<SqlParameter> parameters = new List<SqlParameter>();
+                parameters.Add(new SqlParameter("@NationalIdentityNumber", studentModel.NationalIdentityNumber));
+                parameters.Add(new SqlParameter("@FirstName", studentModel.FirstName));
+                parameters.Add(new SqlParameter("@LastName", studentModel.LastName));
+                parameters.Add(new SqlParameter("@Address", studentModel.Address));
+                parameters.Add(new SqlParameter("@PhoneNumber", studentModel.PhoneNumber));
+                parameters.Add(new SqlParameter("@DateOfBirth", studentModel.DateOfBirth));
+                if (string.IsNullOrEmpty(studentModel.GuardianName))
+                    studentModel.GuardianName = "";
+                parameters.Add(new SqlParameter("@GuardianName", studentModel.GuardianName));
+                parameters.Add(new SqlParameter("@UserAccountID", HttpContext.Current.Session["userAccountID"]));
+                return _databaseCommand.InsertUpdateData(InsertNewStudent, parameters);
             }
-            _dal.CloseConnection();
-            return numberOfRowsAffected;
+            catch (Exception)
+            {
+                throw;
+            }
         }
 
-        public bool NationalIdentityNumberExists(string nationalIdentityNumber)
+        public bool NationalIdentityNumberAlreadyExists(string nationalIdentityNumber)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            bool alreadyExists = false;
-            using (conn)
-            {
-                SqlCommand command = new SqlCommand("SELECT StudentID FROM StudentDetails WHERE NationalIdentityNumber=@NationalIdentityNumber", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.Add(new SqlParameter("@NationalIdentityNumber", nationalIdentityNumber));
-                SqlDataReader reader = command.ExecuteReader();
-                alreadyExists = reader.HasRows;
-            }
-            _dal.CloseConnection();
-            return alreadyExists;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@NationalIdentityNumber", nationalIdentityNumber));
+            var dataTable = _databaseCommand.GetDataWithConditions(CheckIfNationalIdentityNumberAlreadyExists, parameters);
+            return (dataTable.Rows.Count > 0);
         }
 
-        public bool PhoneNumberExists(string phoneNumber)
+        public bool PhoneNumberAlreadyExists(string phoneNumber)
         {
-            _dal.OpenConnection();
-            SqlConnection conn = _dal.Connection;
-            bool alreadyExists = false;
-            using (conn)
-            {
-                SqlCommand command = new SqlCommand("SELECT StudentID FROM StudentDetails WHERE PhoneNumber=@PhoneNumber", conn);
-                command.CommandType = CommandType.Text;
-                command.Parameters.Add(new SqlParameter("@PhoneNumber", phoneNumber));
-                SqlDataReader reader = command.ExecuteReader();
-                alreadyExists = reader.HasRows;
-            }
-            _dal.CloseConnection();
-            return alreadyExists;
+            List<SqlParameter> parameters = new List<SqlParameter>();
+            parameters.Add(new SqlParameter("@PhoneNumber", phoneNumber));
+            var dataTable = _databaseCommand.GetDataWithConditions(CheckIfPhoneNumberAlreadyExists, parameters);
+            return (dataTable.Rows.Count > 0);
         }
     }
 }

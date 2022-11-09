@@ -9,7 +9,7 @@ namespace DataAccessLayer.Repositories.IRepositories
 {
     public interface IResultRepository
     {
-        bool Insert(ResultModel resultModel);
-        bool ResultExists(int studentID);
+        bool InsertNewSetOfResults(ResultModel resultModel);
+        bool ResultAlreadyBeenInput(int studentID);
     }
 }
